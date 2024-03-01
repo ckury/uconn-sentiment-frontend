@@ -16,8 +16,6 @@ google-auth-httplib2==0.1.0
 google-cloud-core==2.2.1
 google-cloud-trace==1.5.1
 googleapis-common-protos==1.54.0
-grpcio==1.43.0
-grpcio-status==1.43.0
 httplib2==0.20.2
 idna==3.3
 itsdangerous==2.0.1
