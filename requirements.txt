@@ -8,3 +8,5 @@ google-cloud-core==2.2.1
 google-cloud-trace==1.5.1
 googleapis-common-protos==1.54.0
 google-cloud-datastore
+gunicorn==20.1.0
+Werkzeug==3.0.1

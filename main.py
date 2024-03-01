@@ -1,15 +1,16 @@
 from flask import Flask, render_template, request
-# from google.cloud import datastore
+from google.cloud import datastore
+import os
 
 app = Flask(__name__)
 
 # Initialize the Datastore client
-# client = datastore.Client()
+client = datastore.Client()
 
 @app.route('/')
 def index():
     return render_template('index.html')
-"""
+
 @app.route('/submit_company_info', methods=['POST'])
 def submit_company_info():
     if request.method == 'POST':
@@ -48,5 +49,4 @@ def submit_company_info():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
-"""
+    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
