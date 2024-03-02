@@ -1,6 +1,8 @@
+import os
+
 from flask import Flask, render_template, request
 from google.cloud import datastore
-import os
+
 
 app = Flask(__name__)
 
