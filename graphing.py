@@ -2,7 +2,7 @@ from google.cloud import datastore
 import plotly.graph_objs as go
 from plotly.offline import plot
 
-def data_plot(kind='Sentiment_Details', ticker='TEP FP'):
+def data_plot(kind='Sentiment_Details', ticker='WM US'):
     # Initialize the Datastore client
     client = datastore.Client()
 
@@ -49,7 +49,7 @@ def data_plot(kind='Sentiment_Details', ticker='TEP FP'):
         ))
 
     fig.update_layout(
-        title='Average Sentiment Scores Over Time by Keyword for YahooTicker TEP FP',
+        title='Average Sentiment Scores Over Time by Keyword for YahooTicker WM US',
         xaxis_title='Period',
         yaxis_title='Average Sentiment Score',
         legend_title='Keywords',
