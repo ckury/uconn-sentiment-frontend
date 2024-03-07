@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, render_template, request
 from google.cloud import datastore
-
+from graphing import data_plot
 
 app = Flask(__name__)
 
@@ -12,6 +12,10 @@ client = datastore.Client()
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/data_plot')
+def graph():
+    return data_plot()
 
 @app.route('/submit_company_info', methods=['POST'])
 def submit_company_info():
