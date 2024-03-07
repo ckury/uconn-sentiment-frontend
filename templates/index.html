@@ -7,21 +7,23 @@
 </head>
 <body>
   <h1>UConn Sentiment Data Manager</h1>
-  <h2>Add/update Company Information</h2>
-  <form action="/submit_company_info" method="post">
+  <details>
+    <summary>Add/update Company Information</summary><br>
+    <form action="/submit_company_info" method="post">
 
-    <label for="yahoo_ticker">Yahoo Ticker:</label>
-    <input type="text" id="yahoo_ticker" name="yahoo_ticker"><br><br>
+      <label for="yahoo_ticker">Yahoo Ticker:</label>
+      <input type="text" id="yahoo_ticker" name="yahoo_ticker"><br><br>
     
 
-    <label for="industry">Industry:</label>
-    <input type="text" id="industry" name="industry"><br><br>
+      <label for="industry">Industry:</label>
+      <input type="text" id="industry" name="industry"><br><br>
 
-    <label for="long_name">Long Name:</label>
-    <input type="text" id="long_name" name="long_name"><br><br>
+      <label for="long_name">Long Name:</label>
+      <input type="text" id="long_name" name="long_name"><br><br>
 
-    <input type="submit" value="Submit">
-  </form>
+      <input type="submit" value="Submit">
+    </form>
+  </details>
 
   <h2>View Sentiment Data</h2>
 
@@ -41,7 +43,16 @@
   <input type="month" id="end-month" name="end-month"><br><br>
 
   <input type="button" value="View Plot">
-  <input type="button" value="View Table">
+  <input type="button" value="View Table"><br><br>
+
+
+  <iframe
+  id="inlineFrameExample"
+  title="Inline Frame Example"
+  width="1200"
+  height="600"
+  src="/data_plot?ticker=WM%20US">
+</iframe>
 
 </body>
 </html>
