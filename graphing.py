@@ -49,7 +49,7 @@ def data_plot(kind='Sentiment_Details', ticker='WM US'):
         ))
 
     fig.update_layout(
-        title='Average Sentiment Scores Over Time by Keyword for YahooTicker WM US',
+        title=f'Average Sentiment Scores Over Time by Keyword for YahooTicker {ticker}',
         xaxis_title='Period',
         yaxis_title='Average Sentiment Score',
         legend_title='Keywords',

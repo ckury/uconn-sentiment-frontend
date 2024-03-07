@@ -15,7 +15,8 @@ def index():
 
 @app.route('/data_plot')
 def graph():
-    return data_plot()
+    ticker = request.args.get('ticker')
+    return data_plot(ticker=ticker)
 
 @app.route('/submit_company_info', methods=['POST'])
 def submit_company_info():
