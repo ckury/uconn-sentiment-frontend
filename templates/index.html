@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Company Information Form</title>
+  <title>UConn Sentiment Data Manager</title>
 </head>
 <body>
-  <h2>Company Information Form</h2>
+  <h1>UConn Sentiment Data Manager</h1>
+  <h2>Add/update Company Information</h2>
   <form action="/submit_company_info" method="post">
 
     <label for="yahoo_ticker">Yahoo Ticker:</label>
@@ -22,12 +23,21 @@
     <input type="submit" value="Submit">
   </form>
 
-  <h2>View Data</h2>
+  <h2>View Sentiment Data</h2>
 
-  <label for="ticker">Ticker Entry:</label>
+  <label for="view_ticker">By Ticker:</label>
   <input type="text" id="ticker" name="Ticker">
 
+  <select name="operator" id="operator">
+    <option value="OR">OR</option>
+    <option value="AND">AND</option>
+  </select>
+
+  <label for="view_industry">By Industry:</label>
+  <input type="text" id="ticker" name="Ticker"><br><br>
+
   <input type="button" value="View Plot">
+  <input type="button" value="View Table">
 
 </body>
 </html>
