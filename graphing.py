@@ -2,7 +2,7 @@ from google.cloud import datastore
 import plotly.graph_objs as go
 from plotly.offline import plot
 
-def data_plot(kind='Sentiment_Details', ticker='WM US'):
+def data_plot(kind='Sentiment_Details', ticker='WM US', industry=None, startmonth=None, endmonth=None):
     # Initialize the Datastore client
     client = datastore.Client()
 
