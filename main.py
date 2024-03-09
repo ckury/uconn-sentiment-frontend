@@ -3,6 +3,7 @@ import os
 from flask import Flask, render_template, request
 from google.cloud import datastore
 from graphing import data_plot
+from table import data_table
 
 app = Flask(__name__)
 
@@ -20,6 +21,14 @@ def graph():
     startmonth = request.args.get('startmonth')
     endmonth = request.args.get('endmonth')
     return data_plot(ticker=ticker, industry=industry, startmonth=startmonth, endmonth=endmonth)
+
+@app.route('/data_table')
+def table():
+    ticker = request.args.get('ticker')
+    industry = request.args.get('industry')
+    startmonth = request.args.get('startmonth')
+    endmonth = request.args.get('endmonth')
+    return data_table(ticker=ticker, industry=industry, startmonth=startmonth, endmonth=endmonth)
 
 @app.route('/submit_company_info', methods=['POST'])
 def submit_company_info():
