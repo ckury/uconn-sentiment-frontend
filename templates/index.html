@@ -1,59 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UConn Sentiment Data Manager</title>
-</head>
-<body>
-  <h1>UConn Sentiment Data Manager</h1>
-  <details>
-    <summary>Add/update Company Information</summary><br>
-    <form action="/submit_company_info" method="post">
 
-      <label for="yahoo_ticker">Yahoo Ticker:</label>
-      <input type="text" id="yahoo_ticker" name="yahoo_ticker"><br><br>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UConn Sentiment Data Manager</title>
+  </head>
+
+  <body>
+
+    <h1>UConn Sentiment Data Manager</h1>
     
+    <details>
+      <summary>Add/update Company Information</summary><br>
+      <form action="/submit_company_info" method="post">
 
-      <label for="industry">Industry:</label>
-      <input type="text" id="industry" name="industry"><br><br>
+        <label for="yahoo_ticker">Yahoo Ticker:</label>
+        <input type="text" id="yahoo_ticker" name="yahoo_ticker"><br><br>
+      
 
-      <label for="long_name">Long Name:</label>
-      <input type="text" id="long_name" name="long_name"><br><br>
+        <label for="industry">Industry:</label>
+        <input type="text" id="industry" name="industry"><br><br>
 
-      <input type="submit" value="Submit">
-    </form>
-  </details>
+        <label for="long_name">Long Name:</label>
+        <input type="text" id="long_name" name="long_name"><br><br>
 
-  <h2>View Sentiment Data</h2>
+        <input type="submit" value="Submit">
+      </form>
+    </details>
 
-  <label for="view_ticker">By Ticker:</label>
-  <input type="text" id="ticker" name="Ticker">
+    <h2>View Sentiment Data</h2>
 
-  <select name="operator" id="operator">
-    <option value="OR">OR</option>
-    <option value="AND">AND</option>
-  </select>
+    <label for="view_ticker">By Ticker:</label>
+    <input type="text" id="ticker" name="Ticker">
 
-  <label for="view_industry">By Industry:</label>
-  <input type="text" id="ticker" name="Ticker"><br><br>
+    <select name="operator" id="operator">
+      <option value="OR">OR</option>
+      <option value="AND">AND</option>
+    </select>
 
-  <label for="view_data_range">Date Range</label>
-  <input type="month" id="start-month" name="start-month">
-  <input type="month" id="end-month" name="end-month"><br><br>
+    <label for="view_industry">By Industry:</label>
+    <input type="text" id="ticker" name="Ticker"><br><br>
 
-  <input type="button" value="View Plot">
-  <input type="button" value="View Table"><br><br>
+    <label for="view_data_range">Date Range</label>
+    <input type="month" id="start-month" name="start-month">
+    <input type="month" id="end-month" name="end-month"><br><br>
+
+    <input type="button" value="View Plot">
+    <input type="button" value="View Table"><br><br>
 
 
-  <iframe
-  id="data_plot"
-  title="Data Plot"
-  style="border:none;"
-  width="100%"
-  height="600"
-  src="/data_plot?ticker=WM%20US">
-  </iframe>
+    <iframe
+    id="data_plot"
+    title="Data Plot"
+    style="border:none;"
+    width="100%"
+    height="600"
+    src="/data_plot?ticker=WM%20US">
+    </iframe>
 
-</body>
+  </body>
+
 </html>
