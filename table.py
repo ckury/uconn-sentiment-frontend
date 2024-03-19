@@ -32,9 +32,9 @@ def data_table(kind='Sentiment_Details', ticker='WM US', industry=None, startmon
         else:
             keyword_period_scores[keyword][period] = [score]
 
-    a = []
-    b = []
-    c = []
+    table_period = []
+    table_scores = []
+    table_keyword = []
 
     for keyword, period_scores in keyword_period_scores.items():
         unique_periods = sorted(period_scores.keys())
@@ -42,21 +42,21 @@ def data_table(kind='Sentiment_Details', ticker='WM US', industry=None, startmon
                         for scores in period_scores.values()]
 
         # Add each row to list
-        a.extend(unique_periods)
-        b.extend(average_scores)
+        table_period.extend(unique_periods)
+        table_scores.extend(average_scores)
 
         i=1
 
         while i <= len(average_scores):
-            c.append(keyword)
+            table_keyword.append(keyword)
             i += 1
         
-    c.sort()
+    table_keyword.sort()
 
     # Prepare the Plotly table
     fig = go.Figure(data=[go.Table( 
     header=dict(values=['Period', 'Score', 'Keyword'], align="left"), 
-    cells=dict(values=[a, b, c], align="left")) 
+    cells=dict(values=[table_period, table_scores, table_keyword], align="left")) 
     ]) 
 
     # Return HTML div
