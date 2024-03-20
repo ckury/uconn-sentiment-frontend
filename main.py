@@ -5,6 +5,12 @@ from google.cloud import datastore
 from dataplots.graphing import data_plot
 from dataplots.table import data_table
 
+"""DASH IMPORTS BEGINING"""
+from dash import dash, html
+from dataplots.company_data_table import company_data_table
+"""DASH IMPORTS ENDING"""
+
+
 app = Flask(__name__)
 
 # Initialize the Datastore client
@@ -25,10 +31,6 @@ def company_info():
 @app.route('/topics')
 def topics():
     return render_template('topics.html')
-
-@app.route('/dataplots/company_data_table')
-def company_data_table():
-    return "TEMP: Company Data Table"
 
 @app.route('/dataplots/topic_data_table')
 def topic_data_table():
@@ -86,6 +88,14 @@ def submit_company_info():
 
     # If the request method is not POST, just return the form page
     return render_template('index.html')
+
+"""DASH BEGINNING"""
+
+dashapp = dash.Dash(server=app, routes_pathname_prefix="/dataplots/company_data_table/")
+
+company_data_table(dashapp)
+
+"""DASH ENDING"""
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
