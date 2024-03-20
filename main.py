@@ -14,6 +14,10 @@ client = datastore.Client()
 def index():
     return render_template('index.html')
 
+@app.route('/company_info')
+def company_info():
+    return render_template('company_info.html')
+
 @app.route('/data_plot')
 def graph():
     ticker = request.args.get('ticker')
