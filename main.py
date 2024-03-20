@@ -18,6 +18,10 @@ def index():
 def company_info():
     return render_template('company_info.html')
 
+@app.route('/topics')
+def topics():
+    return render_template('topics.html')
+
 @app.route('/data_plot')
 def graph():
     ticker = request.args.get('ticker')
