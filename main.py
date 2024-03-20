@@ -10,9 +10,9 @@ app = Flask(__name__)
 # Initialize the Datastore client
 client = datastore.Client()
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+@app.route('/view_data')
+def view_data():
+    return render_template('view_data.html')
 
 @app.route('/company_info')
 def company_info():
