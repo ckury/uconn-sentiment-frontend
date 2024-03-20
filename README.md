@@ -14,5 +14,6 @@ To develop and test the code locally, a few things must be set up prior. Follow 
      - Flask
      - google-cloud-datastore
      - plotly
+     - dash
 4. Authenticate Google Cloud CLI
 5. Run main.py
