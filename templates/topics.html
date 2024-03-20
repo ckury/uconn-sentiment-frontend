@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<h1>UConn Sentiment Data Manager</h1>
+    <h1>UConn Sentiment Data Manager</h1>
 
-    <a href="company_info"><button>Edit Company Info</button></a>
-    <button type="button" disabled>Edit Topics</button>
-    <a href="/"><button>View Data</button></a>
-    
-<h2>Add Topics</h2>
+        <!-- Menu Buttons -->
+        <a href="company_info"><button>Edit Company Info</button></a>
+        <button type="button" disabled>Edit Topics</button>
+        <a href="/"><button>View Data</button></a>
+      
+    <h2>Add Topics</h2>
 
     <form action="/submit_company_info" method="post">
 
-      <label for="Sector">Sector:</label>
-      <input type="text" id="sector" name="sector"><br><br>
+        <label for="Sector">Sector:</label>
+        <input type="text" id="sector" name="sector"><br><br>
     
 
-      <label for="classification">Classification:</label>
-      <input type="text" id="classification" name="industry"><br><br>
+        <label for="classification">Classification:</label>
+        <input type="text" id="classification" name="industry"><br><br>
 
-      <label for="keyword">Keyword:</label>
-      <input type="text" id="keyword" name="long_name"><br><br>
+        <label for="keyword">Keyword:</label>
+        <input type="text" id="keyword" name="long_name"><br><br>
 
-      <input type="submit" value="Submit">
+        <input type="submit" value="Submit">
     </form>
 </html>

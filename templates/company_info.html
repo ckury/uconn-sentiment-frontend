@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<h1>UConn Sentiment Data Manager</h1>
+    <h1>UConn Sentiment Data Manager</h1>
 
-    <button type="button" disabled>Edit Company Info</button>
-    <a href="topics"><button>Edit Topics</button></a>
-    <a href="/"><button>View Data</button></a>
+        <!-- Menu Buttons -->
+        <button type="button" disabled>Edit Company Info</button>
+        <a href="topics"><button>Edit Topics</button></a>
+        <a href="/"><button>View Data</button></a>
     
-<h2>Add Company Info</h2>
+    <h2>Add Company Info</h2>
 
     <form action="/submit_company_info" method="post">
 
-    <label for="yahoo_ticker">Yahoo Ticker:</label>
-    <input type="text" id="yahoo_ticker" name="yahoo_ticker"><br><br>
+        <label for="yahoo_ticker">Yahoo Ticker:</label>
+        <input type="text" id="yahoo_ticker" name="yahoo_ticker"><br><br>
         
 
-    <label for="industry">Industry:</label>
-    <input type="text" id="industry" name="industry"><br><br>
+        <label for="industry">Industry:</label>
+        <input type="text" id="industry" name="industry"><br><br>
 
-    <label for="long_name">Long Name:</label>
-    <input type="text" id="long_name" name="long_name"><br><br>
+        <label for="long_name">Long Name:</label>
+        <input type="text" id="long_name" name="long_name"><br><br>
 
-    <input type="submit" value="Submit">
+        <input type="submit" value="Submit">
     </form>
 </html>
