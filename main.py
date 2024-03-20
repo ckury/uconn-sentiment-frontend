@@ -26,15 +26,15 @@ def company_info():
 def topics():
     return render_template('topics.html')
 
-@app.route('/company_data_table')
+@app.route('/dataplots/company_data_table')
 def company_data_table():
     return "TEMP: Company Data Table"
 
-@app.route('/topic_data_table')
+@app.route('/dataplots/topic_data_table')
 def topic_data_table():
     return "TEMP: Topic Data Table"
 
-@app.route('/data_plot')
+@app.route('/dataplots/data_plot')
 def graph():
     ticker = request.args.get('ticker')
     industry = request.args.get('industry')
@@ -42,7 +42,7 @@ def graph():
     endmonth = request.args.get('endmonth')
     return data_plot(ticker=ticker, industry=industry, startmonth=startmonth, endmonth=endmonth)
 
-@app.route('/data_table')
+@app.route('/dataplots/data_table')
 def table():
     ticker = request.args.get('ticker')
     industry = request.args.get('industry')
