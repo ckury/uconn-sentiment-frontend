@@ -2,8 +2,8 @@ import os
 
 from flask import Flask, render_template, request, redirect
 from google.cloud import datastore
-from graphing import data_plot
-from table import data_table
+from dataplots.graphing import data_plot
+from dataplots.table import data_table
 
 app = Flask(__name__)
 
