@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from google.cloud import datastore
 from graphing import data_plot
 from table import data_table
@@ -9,6 +9,10 @@ app = Flask(__name__)
 
 # Initialize the Datastore client
 client = datastore.Client()
+
+@app.route('/')
+def mainpage():
+    return redirect("/view_data")
 
 @app.route('/view_data')
 def view_data():
