@@ -8,6 +8,7 @@ from dataplots.table import data_table
 """DASH IMPORTS BEGINING"""
 from dash import dash, html
 from dataplots.company_data_table import company_data_table
+from dataplots.topic_data_table import topic_data_table
 """DASH IMPORTS ENDING"""
 
 
@@ -31,10 +32,6 @@ def company_info():
 @app.route('/topics')
 def topics():
     return render_template('topics.html')
-
-@app.route('/dataplots/topic_data_table')
-def topic_data_table():
-    return "TEMP: Topic Data Table"
 
 @app.route('/dataplots/data_plot')
 def graph():
@@ -91,9 +88,13 @@ def submit_company_info():
 
 """DASH BEGINNING"""
 
-dashapp = dash.Dash(server=app, routes_pathname_prefix="/dataplots/company_data_table/")
+dashapp_company = dash.Dash(server=app, routes_pathname_prefix="/dataplots/company_data_table/")
 
-company_data_table(dashapp)
+company_data_table(dashapp_company)
+
+dashapp_topic = dash.Dash(server=app, routes_pathname_prefix="/dataplots/topic_data_table/")
+
+topic_data_table(dashapp_topic)
 
 """DASH ENDING"""
 

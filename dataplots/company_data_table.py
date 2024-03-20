@@ -21,10 +21,14 @@ def company_data_table(dashapp):
                 for j in range(5)
             ],
             editable=True,
-            row_deletable=True
+            row_deletable=True,
+            fixed_rows={'headers': True}, 
+            style_table={'height': 400}
         ),
 
         html.Button('Add Company', id='editing-rows-button', n_clicks=0),
+        html.Button('Revert', id='revert-button', n_clicks=0),
+        html.Button('Save', id='save-button', n_clicks=0),
     ])
 
 
