@@ -2,14 +2,14 @@
 
 from dash import dash_table, dcc, html, Input, Output, State, callback
 
-def company_data_table(dashapp):
+def company_data_table(companydashapp):
 
     columns = ["Company Long Name", "Yahoo Ticker", "Industry"]
 
-    dashapp.layout = html.Div([
+    companydashapp.layout = html.Div([
 
         dash_table.DataTable(
-            id='adding-rows-table',
+            id='company-data-table',
             columns=[{
                 'name': '{}'.format(i),
                 'id': 'column-{}'.format(i),
@@ -26,17 +26,15 @@ def company_data_table(dashapp):
             style_table={'height': 400}
         ),
 
-        html.Button('Add Company', id='editing-rows-button', n_clicks=0),
-        html.Button('Revert', id='revert-button', n_clicks=0),
-        html.Button('Save', id='save-button', n_clicks=0),
+        html.Button('Add Company', id='company-add-button', n_clicks=0),
     ])
 
 
     @callback(
-        Output('adding-rows-table', 'data'),
-        Input('editing-rows-button', 'n_clicks'),
-        State('adding-rows-table', 'data'),
-        State('adding-rows-table', 'columns'))
+        Output('company-data-table', 'data'),
+        Input('company-add-button', 'n_clicks'),
+        State('company-data-table', 'data'),
+        State('company-data-table', 'columns'))
     def add_row(n_clicks, rows, columns):
         if n_clicks > 0:
             rows.append({c['id']: '' for c in columns})

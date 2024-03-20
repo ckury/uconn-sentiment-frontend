@@ -2,14 +2,14 @@
 
 from dash import dash_table, dcc, html, Input, Output, State, callback
 
-def topic_data_table(dashapp):
+def topic_data_table(topicdashapp):
 
     columns = ["Sector", "Classification", "Keyword"]
 
-    dashapp.layout = html.Div([
+    topicdashapp.layout = html.Div([
 
         dash_table.DataTable(
-            id='adding-rows-table',
+            id='topic-data-table',
             columns=[{
                 'name': '{}'.format(i),
                 'id': 'column-{}'.format(i),
@@ -26,17 +26,17 @@ def topic_data_table(dashapp):
             style_table={'height': 400}
         ),
 
-        html.Button('Add Topic', id='editing-rows-button', n_clicks=0),
-        html.Button('Revert', id='revert-button', n_clicks=0),
-        html.Button('Save', id='save-button', n_clicks=0),
+        html.Button('Add Topic', id='topic-add-button', n_clicks=0),
+        html.Button('Revert', id='topic-cancel-button', n_clicks=0),
+        html.Button('Save', id='topic-save-button', n_clicks=0),
     ])
 
 
     @callback(
-        Output('adding-rows-table', 'data'),
-        Input('editing-rows-button', 'n_clicks'),
-        State('adding-rows-table', 'data'),
-        State('adding-rows-table', 'columns'))
+        Output('topic-data-table', 'data'),
+        Input('topic-add-button', 'n_clicks'),
+        State('topic-data-table', 'data'),
+        State('topic-data-table', 'columns'))
     def add_row(n_clicks, rows, columns):
         if n_clicks > 0:
             rows.append({c['id']: '' for c in columns})
