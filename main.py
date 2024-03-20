@@ -33,6 +33,10 @@ def company_info():
 def topics():
     return render_template('topics.html')
 
+@app.route('/dataplot_placeholder')
+def dataplot_placeholder():
+    return render_template('dataplot_placeholder.html')
+
 @app.route('/dataplots/data_plot')
 def graph():
     ticker = request.args.get('ticker')
