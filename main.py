@@ -26,6 +26,14 @@ def company_info():
 def topics():
     return render_template('topics.html')
 
+@app.route('/company_data_table')
+def company_data_table():
+    return "TEMP: Company Data Table"
+
+@app.route('/topic_data_table')
+def topic_data_table():
+    return "TEMP: Topic Data Table"
+
 @app.route('/data_plot')
 def graph():
     ticker = request.args.get('ticker')
