@@ -28,7 +28,10 @@
         <input type="text" id="keyword" name="long_name"><br><br>
 
         <input type="submit" value="Submit">
-    </form>
+    </form><br>
+
+    <button type="button" onclick="refreshDataPlot()">Revert</button>
+    <button type="button" onclick="">Save</button>
 
     <iframe
     id="data_plot"
@@ -38,4 +41,10 @@
     height="600"
     src="/dataplots/topic_data_table/">
     </iframe>
+
+    <script>
+        function refreshDataPlot(){
+                document.getElementById('data_plot').contentDocument.location.reload(true);
+            }
+    </script>
 </html>
