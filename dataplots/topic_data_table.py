@@ -26,11 +26,14 @@ def topic_data_table(topicdashapp):
             data=data_values,
             editable=True,
             row_deletable=True,
+            filter_action="native",
+            sort_action="native",
+            sort_mode="multi",
             fixed_rows={'headers': True}, 
-            style_table={'height': 400}
+            style_table={'height': "100%"}
         ),
 
-        html.Button('Add Topic', id='topic-add-button', n_clicks=0),
+        html.Button('Add Topic Entry to Bottom', id='topic-add-button', n_clicks=0),
     ])
 
 
