@@ -78,11 +78,15 @@
       }
 
       function viewPlot(){
-        document.getElementById("data_plot").setAttribute("src", "/dataplots/data_plot?ticker=WM%20US")
+        let tickerText = document.getElementById("ticker").value;
+        tickerText.replace(/%20/g, " ")
+        document.getElementById("data_plot").setAttribute("src", "/dataplots/data_plot?ticker="+tickerText)
       }
 
       function viewTable(){
-        document.getElementById("data_plot").setAttribute("src", "/dataplots/data_table?ticker=WM%20US")
+        let tickerText = document.getElementById("ticker").value;
+        tickerText.replace(/%20/g, " ")
+        document.getElementById("data_plot").setAttribute("src", "/dataplots/data_table?ticker="+tickerText)
       }
 
       
