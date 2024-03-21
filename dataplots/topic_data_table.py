@@ -1,25 +1,31 @@
 """DASH FILE"""
 
+from google.cloud import datastore
 from dash import dash_table, dcc, html, Input, Output, State, callback
 
 def topic_data_table(topicdashapp):
 
-    columns = ["Sector", "Classification", "Keyword"]
+    client = datastore.Client()
+
+    query = client.query(kind="Topics")
+
+    entities = list(query.fetch())
+
+    columns = [{'id': "Sector", 'name': "Sector"}, {'id':"Classification", 'name': "Classification"}, {'id':"Keyword", 'name':"Keyword"}]
+
+    data_values = []
+
+    data_values.append({"Sector": "Test Sector", "Classification": "Test Classification", "Keyword": "Test Keyword"})
+
+    for entity in entities:
+        data_values.append({"Sector": entity.get('Sector'), "Classification": entity.get('classification'), "Keyword": entity.get('keyword')})
 
     topicdashapp.layout = html.Div([
 
         dash_table.DataTable(
             id='topic-data-table',
-            columns=[{
-                'name': '{}'.format(i),
-                'id': 'column-{}'.format(i),
-                'deletable': False,
-                'renamable': False
-            } for i in columns],
-            data=[
-                {'column-{}'.format(i): (j + (i-1)*5) for i in range(1, 5)}
-                for j in range(5)
-            ],
+            columns=columns,
+            data=data_values,
             editable=True,
             row_deletable=True,
             fixed_rows={'headers': True}, 
@@ -27,8 +33,6 @@ def topic_data_table(topicdashapp):
         ),
 
         html.Button('Add Topic', id='topic-add-button', n_clicks=0),
-        html.Button('Revert', id='topic-cancel-button', n_clicks=0),
-        html.Button('Save', id='topic-save-button', n_clicks=0),
     ])
 
 
