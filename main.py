@@ -92,9 +92,9 @@ def submit_company_info():
 
 """DASH BEGINNING"""
 
-dashapp_company = dash.Dash(server=app, routes_pathname_prefix="/dataplots/company_data_table/")
+# dashapp_company = dash.Dash(server=app, routes_pathname_prefix="/dataplots/company_data_table/")
 
-company_data_table(dashapp_company)
+# company_data_table(dashapp_company)
 
 dashapp_topic = dash.Dash(server=app, routes_pathname_prefix="/dataplots/topic_data_table/")
 
