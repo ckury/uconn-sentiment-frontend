@@ -15,8 +15,6 @@ def topic_data_table(topicdashapp):
 
     data_values = []
 
-    data_values.append({"Sector": "Test Sector", "Classification": "Test Classification", "Keyword": "Test Keyword"})
-
     for entity in entities:
         data_values.append({"Sector": entity.get('Sector'), "Classification": entity.get('classification'), "Keyword": entity.get('keyword')})
 
