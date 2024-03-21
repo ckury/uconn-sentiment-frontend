@@ -2,17 +2,16 @@
 <html lang="en">
   <style>
     /* Center the loader */
-    #loaderdiv {
+    .loader {
       position: absolute;
       left: 50%;
       top: 50%;
-      z-index: 1;
+      border: 16px solid #f3f3f3; /* Light grey */
+      border-top: 16px solid #000E2F; /* Blue */
+      border-bottom: 16px solid #000E2F;
+      border-radius: 50%;
       width: 120px;
       height: 120px;
-      margin: -76px 0 0 -76px;
-      border: 16px solid #f3f3f3;
-      border-radius: 50%;
-      border-top: 16px solid #3498db;
       animation: spin 2s linear infinite;
     }
     
@@ -58,6 +57,7 @@
     <input type="button" value="View Plot" onclick="viewPlot()">
     <input type="button" value="View Table" onclick="viewTable()"><br><br>
 
+    <div class="loader" id="loader" style="display: none;"></div>
 
     <iframe
     id="data_plot"
@@ -68,9 +68,14 @@
     src="/dataplot_placeholder">
     </iframe>
 
-    <div class="loaderdiv"></div>
-
     <script>
+      function hideSpinner(){
+        document.getElementById("loader").style.display = "none";
+      }
+
+      function showSpinner(){
+        document.getElementById("loader").style.display = "block";
+      }
 
       function viewPlot(){
         document.getElementById("data_plot").setAttribute("src", "/dataplots/data_plot?ticker=WM%20US")
