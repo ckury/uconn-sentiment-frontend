@@ -71,22 +71,38 @@
     <script>
       function hideSpinner(){
         document.getElementById("loader").style.display = "none";
+        document.getElementById("data_plot").style.display = "block";
       }
 
       function showSpinner(){
         document.getElementById("loader").style.display = "block";
+        document.getElementById("data_plot").style.display = "none";
       }
 
       function viewPlot(){
         let tickerText = document.getElementById("ticker").value;
+        if (tickerText == "") {
+          alert("Input Needed")
+          return
+        }
         tickerText.replace(/%20/g, " ")
         document.getElementById("data_plot").setAttribute("src", "/dataplots/data_plot?ticker="+tickerText)
+
+        showSpinner()
+        setTimeout(hideSpinner, 7500)
       }
 
       function viewTable(){
         let tickerText = document.getElementById("ticker").value;
+        if (tickerText == "") {
+          alert("Input Needed")
+          return
+        }
         tickerText.replace(/%20/g, " ")
         document.getElementById("data_plot").setAttribute("src", "/dataplots/data_table?ticker="+tickerText)
+
+        showSpinner()
+        setTimeout(hideSpinner, 7500)
       }
 
       
