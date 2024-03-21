@@ -54,8 +54,8 @@
     <input type="month" id="start-month" name="start-month">
     <input type="month" id="end-month" name="end-month"><br><br>
 
-    <input type="button" value="View Plot" onclick="viewPlot()">
-    <input type="button" value="View Table" onclick="viewTable()"><br><br>
+    <input id="viewPlot" type="button" value="View Plot" onclick="viewPlot()">
+    <input id="viewTable" type="button" value="View Table" onclick="viewTable()"><br><br>
 
     <div class="loader" id="loader" style="display: none;"></div>
 
@@ -71,12 +71,15 @@
     <script>
       function hideSpinner(){
         document.getElementById("loader").style.display = "none";
-        document.getElementById("data_plot").style.display = "block";
+        document.getElementById("viewPlot").disabled = false
+        document.getElementById("viewTable").disabled = false
+        
       }
 
       function showSpinner(){
         document.getElementById("loader").style.display = "block";
-        document.getElementById("data_plot").style.display = "none";
+        document.getElementById("viewPlot").disabled = true
+        document.getElementById("viewTable").disabled = true
       }
 
       function viewPlot(){
