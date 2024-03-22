@@ -42,20 +42,20 @@
     <label for="view_ticker">By Ticker:</label>
     <input type="text" id="ticker" name="Ticker">
 
-    <select name="operator" id="operator">
+    <select name="operator" id="operator" hidden="hidden">
       <option value="OR">OR</option>
       <option value="AND">AND</option>
     </select>
 
-    <label for="view_industry">By Industry:</label>
-    <input type="text" id="ticker" name="Ticker"><br><br>
+    <label for="view_industry" hidden="hidden">By Industry:</label>
+    <input type="text" id="industry" name="industry" hidden="hidden"><br><br>
 
-    <label for="view_data_range">Date Range</label>
-    <input type="month" id="start-month" name="start-month">
-    <input type="month" id="end-month" name="end-month"><br><br>
+    <label for="view_data_range" hidden="hidden">Date Range</label>
+    <input type="month" id="start-month" name="start-month" hidden="hidden">
+    <input type="month" id="end-month" name="end-month" hidden="hidden"><br><br>
 
     <input id="viewPlot" type="button" value="View Plot" onclick="viewPlot()">
-    <input id="viewTable" type="button" value="View Table" onclick="viewTable()"><br><br>
+    <input id="viewTable" type="button" value="View Table" onclick="viewTable()" hidden="hidden"><br><br>
 
     <div class="loader" id="loader" style="display: none;"></div>
 

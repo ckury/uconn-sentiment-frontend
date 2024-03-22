@@ -2,7 +2,7 @@ from google.cloud import datastore
 import plotly.graph_objs as go
 from plotly.offline import plot
 
-def data_plot(kind='Sentiment_Details', ticker='WM US', industry=None, startmonth=None, endmonth=None):
+def data_plot(kind='Banks', ticker='WM US', industry=None, startmonth=None, endmonth=None):
     # Initialize the Datastore client
     client = datastore.Client()
 
@@ -21,7 +21,7 @@ def data_plot(kind='Sentiment_Details', ticker='WM US', industry=None, startmont
 
     for entity in filtered_entities:
         period = entity['Period']
-        keyword = entity['Keyword']
+        keyword = entity['Category']
         score = entity['Score']
 
         if keyword not in keyword_period_scores:
@@ -49,10 +49,10 @@ def data_plot(kind='Sentiment_Details', ticker='WM US', industry=None, startmont
         ))
 
     fig.update_layout(
-        title=f'Average Sentiment Scores Over Time by Keyword for YahooTicker {ticker}',
+        title=f'Average Sentiment Scores Over Time by Category for {ticker}',
         xaxis_title='Period',
         yaxis_title='Average Sentiment Score',
-        legend_title='Keywords',
+        legend_title='Categories',
         xaxis=dict(tickangle=45)
     )
 
