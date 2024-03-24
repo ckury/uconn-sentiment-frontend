@@ -25,6 +25,10 @@ def mainpage():
 def view_data():
     return render_template('view_data.html')
 
+@app.route('/view_data/cc_detailed')
+def view_data_cc():
+    return render_template('view_data_cc_detailed.html')
+
 @app.route('/company_info')
 def company_info():
     return render_template('company_info.html')
