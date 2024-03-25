@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UConn Sentiment Data Manager</title>
+  </head>
+
+  <body>
+
+    <h1>UConn Sentiment Data Manager</h1>
+    
+    <a href="company_info"><button>Edit Company Info</button></a>
+    <a href="topics"><button>Edit Topics</button></a>
+    <a href="view_data"><button>View Data</button></a>
+    <button type="button" disabled>Model Control</button>
+
+    <hr>
+
+    <h3>1. Upload</h3>
+
+    <div id="upload_buttons">
+      <button onclick="uploadModelShow()" id="model_upload_button">Model Upload</button>
+      <button onclick="uploadDataShow()" id="data_upload_button">Data Upload</button>
+    </div>
+    
+
+    <div id="model_upload" style="display: none;">
+      <button onclick="uploadModelHide()">&lt</button>
+      <label>Model Upload: </label>
+      <select name="model_source" id="model_source" onchange="dropdownModelSource()">
+        <option value="github_repo">GitHub Repository</option>
+        <option value="local_model_upload">Local Upload</option>
+      </select><br><br>
+
+      <div id="github_repo-div" style="display: block;">
+
+        <input id="github-repo-textfield" type="text" placeholder="GitHub Repository URL">
+
+        <br><br>
+
+        <button>Clone Repository to Model Bucket</button>
+
+      </div>
+
+      <div id="model_local_upload-div" style="display: none;">
+
+        <input type="file">
+
+        <br><br>
+
+        <button>Upload File to Model Bucket</button>
+
+      </div>
+    </div>
+
+    <div id="data_upload" style="display: none;">
+      <button onclick="uploadDataHide()">&lt</button>
+      <label>Upload Data: </label>
+      <select name="data_source" id="data_source" onchange="dropdownDataSource()">
+        <option value="local_data_upload">Local Upload</option>
+      </select><br><br>
+
+      <div id="data_local_upload-div" style="display: block;">
+
+        <input type="file">
+
+        <br><br>
+
+        <button>Upload File to Data Bucket</button>
+
+      </div>
+
+    </div>
+
+    <h3>2. Selection</h3>
+
+    <label>Model: </label>
+    <input type="text" disabled>
+    <button>...</button>
+
+    <br><br>
+    
+    <label>Data: </label>
+    <input type="text" disabled>
+    <button>...</button>
+
+    <br>
+
+    <h3>3. Processing</h3>
+
+    <label>VM Selection: </label>
+    <select>
+      <option>E2-Standard-2</option>
+    </select>
+
+    <label>vCPUs: </label>
+    <input type="text" disabled size="2">
+
+    <label>RAM: </label>
+    <input type="text" disabled size="2">
+    <label>GBs</label>
+
+    <br>
+
+    <h3>4. Output</h3>
+
+  </body>
+
+  <script>
+    function uploadModelShow(){
+      document.getElementById("model_upload").style.display = "block"
+      document.getElementById("upload_buttons").style.display = "none"
+    }
+    function uploadModelHide(){
+      document.getElementById("model_upload").style.display = "none"
+      document.getElementById("upload_buttons").style.display = "block"
+    }
+
+    function uploadDataShow(){
+      document.getElementById("data_upload").style.display = "block"
+      document.getElementById("upload_buttons").style.display = "none"
+    }
+    function uploadDataHide(){
+      document.getElementById("data_upload").style.display = "none"
+      document.getElementById("upload_buttons").style.display = "block"
+    }
+
+    function dropdownModelSource(){
+      dropSelect = document.getElementById("model_source").value
+      if (dropSelect == "github_repo"){
+        document.getElementById("github_repo-div").style.display = "block"
+        document.getElementById("model_local_upload-div").style.display = "none"
+      } 
+      if (dropSelect == "local_model_upload") {
+        document.getElementById("github_repo-div").style.display = "none"
+        document.getElementById("model_local_upload-div").style.display = "block"
+        
+      }
+
+    }
+
+    function dropdownDataSource(){
+      dropSelect = document.getElementById("data_source").value
+      if (dropSelect == "local_data_upload"){
+        document.getElementById("data_local_upload-div").style.display = "block"
+      }
+    }
+  </script>
+
+</html>
