@@ -41,7 +41,9 @@
 
     <br><br>
 
-    <h3>1. Upload</h3>
+    <h3>Create Model Job</h3>
+
+    <h4>1. Upload</h4>
 
     <div id="upload_buttons">
       <button onclick="uploadModelShow()" id="model_upload_button">Model Upload</button>
@@ -86,7 +88,7 @@
 
       <div id="data_local_upload-div" style="display: block;">
 
-        <input type="file">
+        <input type="file" id="data_upload_chooser">
 
         <br><br>
 
@@ -96,7 +98,7 @@
 
     </dialog>
 
-    <h3>2. Selection</h3>
+    <h4>2. Selection</h4>
 
     <label>Model: </label>
     <input type="text" disabled>
@@ -112,7 +114,7 @@
 
     <br>
 
-    <h3>3. Processing</h3>
+    <h4>3. Processing</h4>
 
     <label>VM Selection: </label>
     <select>
@@ -128,7 +130,7 @@
 
     <br>
 
-    <h3>4. Output</h3>
+    <h4>4. Output</h4>
 
     <label>Output Type: </label>
     <select id="output_select" onchange="dropdownOutput()">
@@ -137,8 +139,9 @@
       <option value="file_output">File Output</option>
     </select>
 
+    <br>
+
     <div id="save_location" style="display: none;">
-      <br>
       <select>
         <option>Comma Separated Values (.csv)</option>
         <option>Excel (.xlsx)</option>
@@ -146,9 +149,18 @@
       </select>
     </div>
 
-    <br><br>
+    <br>
 
-    <button>Create Job</button>
+    <button onclick="showCreateJob()">Create Job</button>
+
+    <dialog open id="create_job" style="display: none;">
+      <div>
+        <label>What position should the job be placed at?</label><br><br>
+        <button onclick="hideCreateJob()">Cancel</button>
+        <button>At End of Queue</button>
+        <button>At Beginning of Queue</button>
+      </div>      
+    </dialog>
 
   </body>
 
@@ -206,6 +218,19 @@
       } else {
         document.getElementById("save_location").style.display = "none"
       }
+    }
+
+    function dataLocalUpload(){
+      
+    }
+
+    function showCreateJob(){
+      document.getElementById("create_job").style.display = "block"
+      maskPage()
+    }
+    function hideCreateJob(){
+      document.getElementById("create_job").style.display = "none"
+      unmaskPage()
     }
   </script>
 
