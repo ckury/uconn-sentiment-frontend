@@ -37,6 +37,10 @@ def company_info():
 def topics():
     return render_template('topics.html')
 
+@app.route('/model_control')
+def model_control():
+    return render_template('model_control.html')
+
 @app.route('/dataplot_placeholder')
 def dataplot_placeholder():
     return render_template('dataplot_placeholder.html')
