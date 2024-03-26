@@ -9,7 +9,11 @@ def topic_data_table(topicdashapp):
 
     query = client.query(kind="Topics")
 
-    entities = list(query.fetch())
+    try:
+        entities = list(query.fetch())
+    
+    except:
+        entities = []
 
     columns = [{'id': "Sector", 'name': "Sector"}, {'id':"Classification", 'name': "Classification"}, {'id':"Keyword", 'name':"Keyword"}]
 

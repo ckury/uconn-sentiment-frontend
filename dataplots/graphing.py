@@ -6,6 +6,14 @@ def data_plot(kind='Sentiment_Details', ticker='WM US', industry=None, startmont
     # Initialize the Datastore client
     client = datastore.Client()
 
+    if "," in ticker:
+        ticker = ticker.split(",")
+
+    tickers = []
+
+    for v in ticker:
+        tickers.append(v.strip())
+
     # Create a query to fetch entities from the Datastore
     query = client.query(kind=kind)
     query.order = ['CallDate']
@@ -13,18 +21,19 @@ def data_plot(kind='Sentiment_Details', ticker='WM US', industry=None, startmont
     # Fetch the data
     try:
         entities = list(query.fetch())
+    
     except:
         return 429
-    
+
     # Prepare the data for plotting
     keyword_period_scores = {}
 
     # Filter entities after fetching
-    filtered_entities = [e for e in entities if e['YahooTicker'] == ticker]
+    filtered_entities = [e for e in entities if e['YahooTicker'] in tickers]
 
     for entity in filtered_entities:
         period = entity['Period']
-        keyword = entity['Keyword']
+        keyword = entity['YahooTicker'] + ": " + entity['Keyword']
         score = entity['Score']
 
         if keyword not in keyword_period_scores:
@@ -52,7 +61,7 @@ def data_plot(kind='Sentiment_Details', ticker='WM US', industry=None, startmont
         ))
 
     fig.update_layout(
-        title=f'Average Sentiment Scores Over Time by Keyword for YahooTicker {ticker}',
+        title=f'Average Sentiment Scores Over Time by Keyword for YahooTicker {tickers}',
         xaxis_title='Period',
         yaxis_title='Average Sentiment Score',
         legend_title='Keywords',

@@ -57,7 +57,13 @@ def table():
     industry = request.args.get('industry')
     startmonth = request.args.get('startmonth')
     endmonth = request.args.get('endmonth')
-    return data_table(ticker=ticker, industry=industry, startmonth=startmonth, endmonth=endmonth)
+    
+    output = data_table(ticker=ticker, industry=industry, startmonth=startmonth, endmonth=endmonth)
+
+    if output == 429:
+        output = render_template("429.html")
+
+    return output
 
 @app.route('/submit_company_info', methods=['POST'])
 def submit_company_info():
