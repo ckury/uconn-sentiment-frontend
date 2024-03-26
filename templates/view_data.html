@@ -1,116 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-  <style>
-    /* Center the loader */
-    .loader {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      border: 16px solid #f3f3f3; /* Light grey */
-      border-top: 16px solid #000E2F; /* Blue */
-      border-bottom: 16px solid #000E2F;
-      border-radius: 50%;
-      width: 120px;
-      height: 120px;
-      animation: spin 2s linear infinite;
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+  body {
+    font-family: "Roboto", sans-serif;
+  }
+
+  /* Center the loader */
+  .loader {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border: 16px solid #f3f3f3;
+    /* Light grey */
+    border-top: 16px solid #000E2F;
+    /* Blue */
+    border-bottom: 16px solid #000E2F;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
     }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+
+    100% {
+      transform: rotate(360deg);
     }
-    </style>
+  }
+</style>
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UConn Sentiment Data Manager</title>
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UConn Sentiment Data Manager</title>
+</head>
 
-  <body>
+<body>
 
-    <h1>UConn Sentiment Data Manager</h1>
-    
-    <a href="company_info"><button>Edit Company Info</button></a>
-    <a href="topics"><button>Edit Topics</button></a>
-    <button type="button" disabled>View Data</button>
+  <h1>UConn Sentiment Data Manager</h1>
 
-    <hr>
+  <a href="company_info"><button>Edit Company Info</button></a>
+  <a href="topics"><button>Edit Topics</button></a>
+  <button type="button" disabled>View Data</button>
 
-    <h2>View Sentiment Data</h2>
+  <hr>
 
-    <label for="view_ticker">By Ticker:</label>
-    <input type="text" id="ticker" name="Ticker">
+  <h2>View Sentiment Data</h2>
 
-    <select name="operator" id="operator">
-      <option value="OR">OR</option>
-      <option value="AND">AND</option>
-    </select>
+  <label for="view_ticker">By Ticker:</label>
+  <input type="text" id="ticker" name="Ticker">
 
-    <label for="view_industry">By Industry:</label>
-    <input type="text" id="ticker" name="Ticker"><br><br>
+  <select name="operator" id="operator">
+    <option value="OR">OR</option>
+    <option value="AND">AND</option>
+  </select>
 
-    <label for="view_data_range">Date Range</label>
-    <input type="month" id="start-month" name="start-month">
-    <input type="month" id="end-month" name="end-month"><br><br>
+  <label for="view_industry">By Industry:</label>
+  <input type="text" id="ticker" name="Ticker"><br><br>
 
-    <input id="viewPlot" type="button" value="View Plot" onclick="viewPlot()">
-    <input id="viewTable" type="button" value="View Table" onclick="viewTable()"><br><br>
+  <label for="view_data_range">Date Range</label>
+  <input type="month" id="start-month" name="start-month">
+  <input type="month" id="end-month" name="end-month"><br><br>
 
-    <div class="loader" id="loader" style="display: none;"></div>
+  <input id="viewPlot" type="button" value="View Plot" onclick="viewPlot()">
+  <input id="viewTable" type="button" value="View Table" onclick="viewTable()"><br><br>
 
-    <iframe
-    id="data_plot"
-    title="Data Plot"
-    style="border:none;"
-    width="100%"
-    height="600"
-    src="/dataplot_placeholder">
-    </iframe>
+  <div class="loader" id="loader" style="display: none;"></div>
 
-    <script>
-      function hideSpinner(){
-        document.getElementById("loader").style.display = "none";
-        document.getElementById("viewPlot").disabled = false
-        document.getElementById("viewTable").disabled = false
-        
+  <iframe id="data_plot" title="Data Plot" style="border:none;" width="100%" height="600" src="/dataplot_placeholder">
+  </iframe>
+
+  <script>
+    function hideSpinner() {
+      document.getElementById("loader").style.display = "none";
+      document.getElementById("viewPlot").disabled = false
+      document.getElementById("viewTable").disabled = false
+
+    }
+
+    function showSpinner() {
+      document.getElementById("loader").style.display = "block";
+      document.getElementById("viewPlot").disabled = true
+      document.getElementById("viewTable").disabled = true
+    }
+
+    function viewPlot() {
+      let tickerText = document.getElementById("ticker").value;
+      if (tickerText == "") {
+        alert("Input Needed")
+        return
       }
+      tickerText.replace(/%20/g, " ")
+      document.getElementById("data_plot").setAttribute("src", "/dataplots/data_plot?ticker=" + tickerText)
 
-      function showSpinner(){
-        document.getElementById("loader").style.display = "block";
-        document.getElementById("viewPlot").disabled = true
-        document.getElementById("viewTable").disabled = true
+      showSpinner()
+      setTimeout(hideSpinner, 7500)
+    }
+
+    function viewTable() {
+      let tickerText = document.getElementById("ticker").value;
+      if (tickerText == "") {
+        alert("Input Needed")
+        return
       }
+      tickerText.replace(/%20/g, " ")
+      document.getElementById("data_plot").setAttribute("src", "/dataplots/data_table?ticker=" + tickerText)
 
-      function viewPlot(){
-        let tickerText = document.getElementById("ticker").value;
-        if (tickerText == "") {
-          alert("Input Needed")
-          return
-        }
-        tickerText.replace(/%20/g, " ")
-        document.getElementById("data_plot").setAttribute("src", "/dataplots/data_plot?ticker="+tickerText)
+      showSpinner()
+      setTimeout(hideSpinner, 7500)
+    }
 
-        showSpinner()
-        setTimeout(hideSpinner, 7500)
-      }
 
-      function viewTable(){
-        let tickerText = document.getElementById("ticker").value;
-        if (tickerText == "") {
-          alert("Input Needed")
-          return
-        }
-        tickerText.replace(/%20/g, " ")
-        document.getElementById("data_plot").setAttribute("src", "/dataplots/data_table?ticker="+tickerText)
+  </script>
 
-        showSpinner()
-        setTimeout(hideSpinner, 7500)
-      }
-
-      
-    </script>
-
-  </body>
+</body>
 
 </html>
