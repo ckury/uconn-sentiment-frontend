@@ -65,7 +65,8 @@ def data_plot(kind='Sentiment_Details', ticker='WM US', industry=None, startmont
         xaxis_title='Period',
         yaxis_title='Average Sentiment Score',
         legend_title='Keywords',
-        xaxis=dict(tickangle=45)
+        xaxis=dict(tickangle=45),
+        yaxis_range=[-1, 1]
     )
 
     # Return HTML div
