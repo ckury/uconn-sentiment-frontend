@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UConn Sentiment Data Manager</title>
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UConn Sentiment Data Manager</title>
+</head>
 
-  <body>
-    <style>
-      #page-mask {
+<body>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+    body {
+      font-family: "Roboto", sans-serif;
+    }
+
+    #div-page-mask {
       background: rgba(0, 0, 0, 0.5);
       position: fixed;
       top: 0;
@@ -17,221 +23,268 @@
       bottom: 0;
       left: 0;
     }
-    </style>
 
+    #create_job {
+      position: absolute;
+      top: 40%;
+      border: none !important;
+      border-radius: 4px;
+      box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    #dialog-model_upload {
+      position: absolute;
+      top: 40%;
+      border: none !important;
+      border-radius: 4px;
+      box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    #dialog-data_upload {
+      position: absolute;
+      top: 40%;
+      border: none !important;
+      border-radius: 4px;
+      box-shadow: 0 0 #0000, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+  </style>
+
+  <div id="div-menu_bar">
     <h1>UConn Sentiment Data Manager</h1>
-    
+
     <a href="company_info"><button>Edit Company Info</button></a>
     <a href="topics"><button>Edit Topics</button></a>
     <a href="view_data"><button>View Data</button></a>
     <button type="button" disabled>Model Control</button>
 
     <hr>
+  </div>
 
-    <div id="page-mask" style="display: none;"></div>
+  <div id="div-page-mask" style="display: none;"></div>
+
+  <div id="div-main-content">
 
     <h2>Model Control</h2>
 
-    <h3>Current Processing Queue</h3>
-
-    <div>
+    <div id="div-current_processing">
+      <h3>Current Processing Queue</h3>
       <button>Historical Log</button>
       <button>Refresh Queue</button>
     </div>
 
     <br><br>
+    <div id="div-create-model-job">
+      <h3>Create Model Job</h3>
 
-    <h3>Create Model Job</h3>
+      <h4>1. Upload</h4>
 
-    <h4>1. Upload</h4>
+      <div id="div-upload_buttons">
+        <button onclick="uploadModelShow()" id="model_upload_button">Model Upload</button>
+        <button onclick="uploadDataShow()" id="data_upload_button">Data Upload</button>
+      </div>
 
-    <div id="upload_buttons">
-      <button onclick="uploadModelShow()" id="model_upload_button">Model Upload</button>
-      <button onclick="uploadDataShow()" id="data_upload_button">Data Upload</button>
+      <dialog open id="dialog-model_upload" style="display: none;">
+        <button onclick="uploadModelHide()">X</button>
+        <label>Model Upload: </label>
+        <select id="selector-model_source" onchange="dropdownModelSource()">
+          <option value="github_repo">GitHub Repository</option>
+          <option value="local_model_upload">Local Upload</option>
+        </select><br><br>
+
+        <div id="div-github_repo" style="display: block;">
+
+          <input id="textinput-github_rep_url" type="text" placeholder="GitHub Repository URL">
+
+          <br><br>
+
+          <button>Clone Repository to Model Bucket</button>
+
+        </div>
+
+        <div id="div-model_local_upload" style="display: none;">
+
+          <input type="file">
+
+          <br><br>
+
+          <button>Upload File to Model Bucket</button>
+
+        </div>
+      </dialog>
+
+      <dialog open id="dialog-data_upload" style="display: none;">
+        <button onclick="uploadDataHide()">X</button>
+        <label>Upload Data: </label>
+        <select name="data_source" id="data_source" onchange="dropdownDataSource()">
+          <option value="local_data_upload">Local Upload</option>
+        </select><br><br>
+
+        <div id="div-data_local_upload" style="display: block;">
+
+          <input type="file" id="data_upload_chooser">
+
+          <br><br>
+
+          <button>Upload File to Data Bucket</button>
+
+        </div>
+
+      </dialog>
+
+      <h4>2. Selection</h4>
+
+      <div id="div-model-selection">
+
+        <label>Model: </label>
+        <input type="text" disabled>
+        <button>...</button>
+        <button>Select Most Recent</button>
+
+      </div>
+
+      <br><br>
+
+      <div id="div-data-selection">
+
+        <label>Data: </label>
+        <input type="text" disabled>
+        <button>...</button>
+        <button>Select Most Recent</button>
+
+      </div>
+
+      <br>
+
+      <h4>3. Processing</h4>
+
+      <div id="div-vm-selection">
+
+        <label>VM Selection: </label>
+        <select id="selector-vm_selection">
+          <option value="e2s2">E2-Standard-2</option>
+        </select>
+
+        <label>&nbsp &nbsp vCPUs: </label>
+        <input type="text" disabled size="1" value="2">
+
+        <label>&nbsp &nbsp RAM: </label>
+        <input type="text" disabled size="1" value="8">
+        <label>GBs</label>
+
+      </div>
+
+      <br>
+
+      <h4>4. Output</h4>
+
+      <div id="div-output_selection">
+
+        <label>Output Type: </label>
+        <select id="selector-output_type" onchange="dropdownOutput()">
+          <option value="model_defined">Model Defined</option>
+          <option value="custom">Custom</option>
+          <option value="file_output">File Output</option>
+        </select>
+
+        <br>
+
+        <div id="save_location" style="display: none;">
+          <br>
+          <select>
+            <option>Comma Separated Values (.csv)</option>
+            <option>Excel (.xlsx)</option>
+            <option>Excel 2003 (.xls)</option>
+          </select><br><br>
+          <label>Note: To download once completed, click Historical Log and click the Download button next to the job
+            entry.</label>
+        </div>
+
+      </div>
+
+      <br>
+
+      <div id="div-create-job">
+        <button onclick="showCreateJob()">Create Job</button>
+
+        <dialog open id="create_job" style="display: none;">
+          <label>What position should the job be placed at?</label><br><br>
+          <button onclick="hideCreateJob()">Cancel</button>
+          <button>At End of Queue</button>
+          <button>At Beginning of Queue</button>
+        </dialog>
+      </div>
     </div>
-    
-    <dialog open id="model_upload" style="display: none;">
-      <button onclick="uploadModelHide()">&lt</button>
-      <label>Model Upload: </label>
-      <select name="model_source" id="model_source" onchange="dropdownModelSource()">
-        <option value="github_repo">GitHub Repository</option>
-        <option value="local_model_upload">Local Upload</option>
-      </select><br><br>
+  </div>
+</body>
 
-      <div id="github_repo-div" style="display: block;">
+<script>
+  function maskPage() {
+    document.getElementById("div-page-mask").style.display = "block"
+  }
+  function unmaskPage() {
+    document.getElementById("div-page-mask").style.display = "none"
+  }
 
-        <input id="github-repo-textfield" type="text" placeholder="GitHub Repository URL">
+  function uploadModelShow() {
+    document.getElementById("dialog-model_upload").style.display = "block"
+    maskPage()
+  }
+  function uploadModelHide() {
+    document.getElementById("dialog-model_upload").style.display = "none"
+    unmaskPage()
+  }
 
-        <br><br>
+  function uploadDataShow() {
+    document.getElementById("dialog-data_upload").style.display = "block"
+    maskPage()
+  }
+  function uploadDataHide() {
+    document.getElementById("dialog-data_upload").style.display = "none"
+    unmaskPage()
+  }
 
-        <button>Clone Repository to Model Bucket</button>
-
-      </div>
-
-      <div id="model_local_upload-div" style="display: none;">
-
-        <input type="file">
-
-        <br><br>
-
-        <button>Upload File to Model Bucket</button>
-
-      </div>
-    </dialog>
-
-    <dialog open id="data_upload" style="display: none;">
-      <button onclick="uploadDataHide()">&lt</button>
-      <label>Upload Data: </label>
-      <select name="data_source" id="data_source" onchange="dropdownDataSource()">
-        <option value="local_data_upload">Local Upload</option>
-      </select><br><br>
-
-      <div id="data_local_upload-div" style="display: block;">
-
-        <input type="file" id="data_upload_chooser">
-
-        <br><br>
-
-        <button>Upload File to Data Bucket</button>
-
-      </div>
-
-    </dialog>
-
-    <h4>2. Selection</h4>
-
-    <label>Model: </label>
-    <input type="text" disabled>
-    <button>...</button>
-    <button>Select Most Recent</button>
-
-    <br><br>
-    
-    <label>Data: </label>
-    <input type="text" disabled>
-    <button>...</button>
-    <button>Select Most Recent</button>
-
-    <br>
-
-    <h4>3. Processing</h4>
-
-    <label>VM Selection: </label>
-    <select>
-      <option>E2-Standard-2</option>
-    </select>
-
-    <label>&nbsp &nbsp vCPUs: </label>
-    <input type="text" disabled size="1" value="2">
-
-    <label>&nbsp &nbsp RAM: </label>
-    <input type="text" disabled size="1" value="8">
-    <label>GBs</label>
-
-    <br>
-
-    <h4>4. Output</h4>
-
-    <label>Output Type: </label>
-    <select id="output_select" onchange="dropdownOutput()">
-      <option value="model_defined">Model Defined</option>
-      <option value="custom">Custom</option>
-      <option value="file_output">File Output</option>
-    </select>
-
-    <br>
-
-    <div id="save_location" style="display: none;">
-      <select>
-        <option>Comma Separated Values (.csv)</option>
-        <option>Excel (.xlsx)</option>
-        <option>Excel 2003 (.xls)</option>
-      </select>
-    </div>
-
-    <br>
-
-    <button onclick="showCreateJob()">Create Job</button>
-
-    <dialog open id="create_job" style="display: none;">
-      <div>
-        <label>What position should the job be placed at?</label><br><br>
-        <button onclick="hideCreateJob()">Cancel</button>
-        <button>At End of Queue</button>
-        <button>At Beginning of Queue</button>
-      </div>      
-    </dialog>
-
-  </body>
-
-  <script>
-    function maskPage(){
-      document.getElementById("page-mask").style.display = "block"
+  function dropdownModelSource() {
+    dropSelect = document.getElementById("selector-model_source").value
+    if (dropSelect == "github_repo") {
+      document.getElementById("div-github_repo").style.display = "block"
+      document.getElementById("div-model_local_upload").style.display = "none"
     }
-    function unmaskPage(){
-      document.getElementById("page-mask").style.display = "none"
-    }
-
-    function uploadModelShow(){
-      document.getElementById("model_upload").style.display = "block"
-      maskPage()
-    }
-    function uploadModelHide(){
-      document.getElementById("model_upload").style.display = "none"
-      unmaskPage()
-    }
-
-    function uploadDataShow(){
-      document.getElementById("data_upload").style.display = "block"
-      maskPage()
-    }
-    function uploadDataHide(){
-      document.getElementById("data_upload").style.display = "none"
-      unmaskPage()
-    }
-
-    function dropdownModelSource(){
-      dropSelect = document.getElementById("model_source").value
-      if (dropSelect == "github_repo"){
-        document.getElementById("github_repo-div").style.display = "block"
-        document.getElementById("model_local_upload-div").style.display = "none"
-      } 
-      if (dropSelect == "local_model_upload") {
-        document.getElementById("github_repo-div").style.display = "none"
-        document.getElementById("model_local_upload-div").style.display = "block"
-        
-      }
+    if (dropSelect == "local_model_upload") {
+      document.getElementById("div-github_repo").style.display = "none"
+      document.getElementById("div-model_local_upload").style.display = "block"
 
     }
 
-    function dropdownDataSource(){
-      dropSelect = document.getElementById("data_source").value
-      if (dropSelect == "local_data_upload"){
-        document.getElementById("data_local_upload-div").style.display = "block"
-      }
-    }
+  }
 
-    function dropdownOutput(){
-      dropSelect = document.getElementById("output_select").value
-      if (dropSelect == "file_output"){
-        document.getElementById("save_location").style.display = "block"
-      } else {
-        document.getElementById("save_location").style.display = "none"
-      }
+  function dropdownDataSource() {
+    dropSelect = document.getElementById("data_source").value
+    if (dropSelect == "local_data_upload") {
+      document.getElementById("div-data_local_upload").style.display = "block"
     }
+  }
 
-    function dataLocalUpload(){
-      
+  function dropdownOutput() {
+    dropSelect = document.getElementById("selector-output_type").value
+    if (dropSelect == "file_output") {
+      document.getElementById("save_location").style.display = "block"
+    } else {
+      document.getElementById("save_location").style.display = "none"
     }
+  }
 
-    function showCreateJob(){
-      document.getElementById("create_job").style.display = "block"
-      maskPage()
-    }
-    function hideCreateJob(){
-      document.getElementById("create_job").style.display = "none"
-      unmaskPage()
-    }
-  </script>
+  function dataLocalUpload() {
+
+  }
+
+  function showCreateJob() {
+    document.getElementById("create_job").style.display = "block"
+    maskPage()
+  }
+  function hideCreateJob() {
+    document.getElementById("create_job").style.display = "none"
+    unmaskPage()
+  }
+</script>
 
 </html>
