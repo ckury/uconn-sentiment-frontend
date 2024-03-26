@@ -11,8 +11,11 @@ def data_plot(kind='Sentiment_Details', ticker='WM US', industry=None, startmont
     query.order = ['CallDate']
 
     # Fetch the data
-    entities = list(query.fetch())
-
+    try:
+        entities = list(query.fetch())
+    except:
+        return 429
+    
     # Prepare the data for plotting
     keyword_period_scores = {}
 

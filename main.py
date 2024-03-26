@@ -43,7 +43,13 @@ def graph():
     industry = request.args.get('industry')
     startmonth = request.args.get('startmonth')
     endmonth = request.args.get('endmonth')
-    return data_plot(ticker=ticker, industry=industry, startmonth=startmonth, endmonth=endmonth)
+
+    output = data_plot(ticker=ticker, industry=industry, startmonth=startmonth, endmonth=endmonth)
+
+    if output == 429:
+        output = render_template("429.html")
+
+    return output
 
 @app.route('/dataplots/data_table')
 def table():
