@@ -2,17 +2,21 @@ from google.cloud import datastore
 import plotly.graph_objs as go
 from plotly.offline import plot
 
-def data_plot(kind='Sentiment_Details', ticker='WM US', industry=None, startmonth=None, endmonth=None):
+def data_plot(kind='Banks', ticker='WM US', industry=None, startmonth=None, endmonth=None):
     # Initialize the Datastore client
     client = datastore.Client()
 
+    clean_tickers = []
+
     if "," in ticker:
         ticker = ticker.split(",")
+        for t in ticker:
+            clean_tickers.append(t.strip())
 
-    tickers = []
+    else:
+        clean_tickers.append(ticker.strip())
 
-    for v in ticker:
-        tickers.append(v.strip())
+
 
     # Create a query to fetch entities from the Datastore
     query = client.query(kind=kind)
@@ -29,25 +33,25 @@ def data_plot(kind='Sentiment_Details', ticker='WM US', industry=None, startmont
     keyword_period_scores = {}
 
     # Filter entities after fetching
-    filtered_entities = [e for e in entities if e['YahooTicker'] in tickers]
+    filtered_entities = [e for e in entities if e['YahooTicker'] in clean_tickers]
 
     for entity in filtered_entities:
         period = entity['Period']
-        keyword = entity['YahooTicker'] + ": " + entity['Keyword']
+        category = entity['YahooTicker'] + ": " + entity['Category']
         score = entity['Score']
 
-        if keyword not in keyword_period_scores:
-            keyword_period_scores[keyword] = {}
+        if category not in keyword_period_scores:
+            keyword_period_scores[category] = {}
 
-        if period in keyword_period_scores[keyword]:
-            keyword_period_scores[keyword][period].append(score)
+        if period in keyword_period_scores[category]:
+            keyword_period_scores[category][period].append(score)
         else:
-            keyword_period_scores[keyword][period] = [score]
+            keyword_period_scores[category][period] = [score]
 
     # Prepare the Plotly graph
     fig = go.Figure()
 
-    for keyword, period_scores in keyword_period_scores.items():
+    for category, period_scores in keyword_period_scores.items():
         unique_periods = sorted(period_scores.keys())
         average_scores = [sum(scores) / len(scores)
                         for scores in period_scores.values()]
@@ -57,14 +61,14 @@ def data_plot(kind='Sentiment_Details', ticker='WM US', industry=None, startmont
             x=unique_periods,
             y=average_scores,
             mode='lines+markers',
-            name=keyword
+            name=category
         ))
 
     fig.update_layout(
-        title=f'Average Sentiment Scores Over Time by Keyword for YahooTicker {tickers}',
+        title=f'Average Sentiment Scores Over Time by Category for YahooTicker {clean_tickers}',
         xaxis_title='Period',
         yaxis_title='Average Sentiment Score',
-        legend_title='Keywords',
+        legend_title='Categories',
         xaxis=dict(tickangle=45),
         yaxis_range=[-1, 1]
     )
