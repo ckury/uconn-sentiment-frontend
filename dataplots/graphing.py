@@ -40,6 +40,15 @@ def data_plot(kind='Banks', ticker='WM US', industry=None, startmonth=None, endm
         category = entity['YahooTicker'] + ": " + entity['Category']
         score = entity['Score']
 
+        if period[0] == "Q":
+            quarter = period[1]
+            period = period[2:]
+
+            period = period + "Q" + quarter
+            
+        else:
+            period = period
+
         if category not in keyword_period_scores:
             keyword_period_scores[category] = {}
 
