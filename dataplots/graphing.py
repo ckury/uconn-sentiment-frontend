@@ -45,7 +45,7 @@ def data_plot(kind='Banks', ticker='WM US', industry=None, startmonth=None, endm
             period = period[2:]
 
             period = period + "Q" + quarter
-            
+
         else:
             period = period
 
@@ -56,6 +56,11 @@ def data_plot(kind='Banks', ticker='WM US', industry=None, startmonth=None, endm
             keyword_period_scores[category][period].append(score)
         else:
             keyword_period_scores[category][period] = [score]
+
+    title = ""
+
+    for ticker in clean_tickers:
+        title = title + ticker + ", "
 
     # Prepare the Plotly graph
     fig = go.Figure()
@@ -74,7 +79,7 @@ def data_plot(kind='Banks', ticker='WM US', industry=None, startmonth=None, endm
         ))
 
     fig.update_layout(
-        title=f'Average Sentiment Scores Over Time by Category for YahooTicker {clean_tickers}',
+        title=f'Sentiment Scores over Time by Category for tickers {title}',
         xaxis_title='Period',
         yaxis_title='Average Sentiment Score',
         legend_title='Categories',
