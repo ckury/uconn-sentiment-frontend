@@ -12,12 +12,14 @@
 
   <div class="menuBar">
     <h1 class="topText">UConn Sentiment Data Manager</h1>
-
-    <a href="company_info"><button class="menuButton" >Edit Company Info</button></a>
-    <a href="topics"><button class="menuButton" >Edit Topics</button></a>
-    <button class="menuButton" type="button" disabled>View Data</button>
   
     <hr>
+  </div>
+
+  <div class="sideNav" id="sideNav">
+    <a href="company_info"><button class="menuButton" >Edit Info</button></a>
+    <a href="topics"><button class="menuButton" >Edit Topics</button></a>
+    <button class="menuButton" type="button" disabled>View Data</button>
   </div>
 
   <h2>View Sentiment Data</h2>
@@ -44,8 +46,6 @@
 
   <iframe id="data_plot" title="Data Plot" style="border:none;" width="100%" height="600" src="/dataplot_placeholder">
   </iframe>
-
-  <hr>
 
   <script>
     function hideSpinner() {
