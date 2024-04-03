@@ -2,7 +2,7 @@ from google.cloud import datastore
 import plotly.graph_objs as go
 from plotly.offline import plot
 
-def data_plot(kind='Banks', ticker=None, sector=None, startmonth=None, endmonth=None):
+def data_plot_summary(kind='Banks', ticker=None, sector=None, startmonth=None, endmonth=None):
     # Initialize the Datastore client
     client = datastore.Client()
 
@@ -72,21 +72,10 @@ def data_plot(kind='Banks', ticker=None, sector=None, startmonth=None, endmonth=
         else:
             keyword_period_scores[category][period] = [score]
 
-
-
-    titleTicker, titleSector = "", ""
+    title = ""
 
     for ticker in clean_tickers:
-        titleTicker = titleTicker + ticker + ", "
-
-    titleTicker = titleTicker[:-2]
-
-    for sector in clean_sectors:
-        titleSector = titleSector + sector + ", "
-
-    titleSector = titleSector[:-2]
-
-
+        title = title + ticker + ", "
 
     # Prepare the Plotly graph
     fig = go.Figure()
@@ -105,7 +94,7 @@ def data_plot(kind='Banks', ticker=None, sector=None, startmonth=None, endmonth=
         ))
 
     fig.update_layout(
-        title=f'Sentiment Scores Over Time by Category for Tickers: ({titleTicker}) and Sectors: ({titleSector})',
+        title=f'Sentiment Scores over Time by Category for tickers {title}',
         xaxis_title='Period',
         yaxis_title='Average Sentiment Score',
         legend_title='Categories',

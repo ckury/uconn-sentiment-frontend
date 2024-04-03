@@ -34,19 +34,19 @@
   <input type="text" id="sector" name="Ticker"><br><br>
 
   <label>Data Type:</label>
-  <select name="operator" id="operator">
+  <select name="weightedSelector" id="weightedSelector">
     <option value="Unweighted">Unweighted</option>
     <option value="Weighted">Weighted</option>
   </select><br><br>
   
   <label>View:</label>
-  <select name="operator" id="operator">
-    <option value="OR">Individual Category Data</option>
-    <option value="AND">Summary Data</option>
+  <select name="graphType" id="graphType">
+    <option value="icat">Individual Category Data</option>
+    <option value="sum">Summary Data</option>
   </select><br><br>
 
   <input class="submitButton" id="viewPlot" type="button" value="View Plot" onclick="viewPlot()">
-  <input class="submitButton" id="viewTable" type="button" value="View Table" onclick="viewTable()"><br><br>
+  <input class="submitButton" id="viewTable" type="button" value="View Table" onclick="viewTable()" style="display: none;"><br><br>
 
   <div class="loader" id="loader" style="display: none;"></div>
 
@@ -71,6 +71,8 @@
       let tickerText = document.getElementById("ticker").value;
       let sectorText = document.getElementById("sector").value;
 
+      let graph = document.getElementById("graphType").value;
+
       if (tickerText != "") {
         tickerText.replace(/%20/g, " ")
 
@@ -79,25 +81,11 @@
         sectorText.replace(/%20/g, " ")
       }
 
-      document.getElementById("data_plot").setAttribute("src", "/dataplots/data_plot?ticker=" + tickerText + "&sector=" + sectorText)
+      document.getElementById("data_plot").setAttribute("src", "/dataplots/data_plot?ticker=" + tickerText + "&sector=" + sectorText + "&type=" + graph)
 
       showSpinner()
       setTimeout(hideSpinner, 7500)
     }
-
-    function viewTable() {
-      let tickerText = document.getElementById("ticker").value;
-      if (tickerText == "") {
-        alert("Input Needed")
-        return
-      }
-      tickerText.replace(/%20/g, " ")
-      document.getElementById("data_plot").setAttribute("src", "/dataplots/data_table?ticker=" + tickerText)
-
-      showSpinner()
-      setTimeout(hideSpinner, 7500)
-    }
-
 
   </script>
 
