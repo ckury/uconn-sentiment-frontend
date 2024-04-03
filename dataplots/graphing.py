@@ -2,7 +2,7 @@ from google.cloud import datastore
 import plotly.graph_objs as go
 from plotly.offline import plot
 
-def data_plot(kind='Banks', ticker=None, sector=None, weighted="False", startmonth=None, endmonth=None):
+def data_plot(kind='Banks', ticker=None, sector=None, weighted="False", graphtype="icat", startmonth=None, endmonth=None):
     # Initialize the Datastore client
     client = datastore.Client()
 
