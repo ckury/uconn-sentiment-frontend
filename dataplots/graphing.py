@@ -52,8 +52,11 @@ def data_plot(kind='Banks', ticker=None, sector=None, weighted="False", startmon
 
     if weighted == "True":
         scoreColumn = "WeightedSentiment"
+        weightTitle = "Weighted"
+
     elif weighted == "False":
         scoreColumn = "Score"
+        weightTitle = "Unweighted"
 
     for entity in filtered_entities:
         period = entity['Period']
@@ -110,7 +113,7 @@ def data_plot(kind='Banks', ticker=None, sector=None, weighted="False", startmon
         ))
 
     fig.update_layout(
-        title=f'Sentiment Scores Over Time by Category for Tickers: ({titleTicker}) and Sectors: ({titleSector})',
+        title=f'{weightTitle} Sentiment Scores Over Time by Category for Tickers: ({titleTicker}) and Sectors: ({titleSector})',
         xaxis_title='Period',
         yaxis_title='Average Sentiment Score',
         legend_title='Categories',
