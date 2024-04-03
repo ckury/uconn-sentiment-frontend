@@ -30,17 +30,20 @@
   <label for="view_ticker">By Ticker:</label>
   <input type="text" id="ticker" name="Ticker">
 
+  <label for="view_sector">By Sector:</label>
+  <input type="text" id="sector" name="Ticker"><br><br>
+
+  <label>Data Type:</label>
   <select name="operator" id="operator">
-    <option value="OR">OR</option>
-    <option value="AND">AND</option>
-  </select>
-
-  <label for="view_industry">By Industry:</label>
-  <input type="text" id="ticker" name="Ticker"><br><br>
-
-  <label for="view_data_range">Date Range</label>
-  <input type="month" id="start-month" name="start-month">
-  <input type="month" id="end-month" name="end-month"><br><br>
+    <option value="Unweighted">Unweighted</option>
+    <option value="Weighted">Weighted</option>
+  </select><br><br>
+  
+  <label>View:</label>
+  <select name="operator" id="operator">
+    <option value="OR">Individual Category Data</option>
+    <option value="AND">Summary Data</option>
+  </select><br><br>
 
   <input class="submitButton" id="viewPlot" type="button" value="View Plot" onclick="viewPlot()">
   <input class="submitButton" id="viewTable" type="button" value="View Table" onclick="viewTable()"><br><br>
@@ -66,12 +69,17 @@
 
     function viewPlot() {
       let tickerText = document.getElementById("ticker").value;
-      if (tickerText == "") {
-        alert("Input Needed")
-        return
+      let sectorText = document.getElementById("sector").value;
+
+      if (tickerText != "") {
+        tickerText.replace(/%20/g, " ")
+
       }
-      tickerText.replace(/%20/g, " ")
-      document.getElementById("data_plot").setAttribute("src", "/dataplots/data_plot?ticker=" + tickerText)
+      if (sectorText != "") {
+        sectorText.replace(/%20/g, " ")
+      }
+
+      document.getElementById("data_plot").setAttribute("src", "/dataplots/data_plot?ticker=" + tickerText + "&sector=" + sectorText)
 
       showSpinner()
       setTimeout(hideSpinner, 7500)
