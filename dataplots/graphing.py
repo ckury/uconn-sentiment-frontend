@@ -45,7 +45,10 @@ def data_plot(kind='Banks', ticker=None, sector=None, startmonth=None, endmonth=
     keyword_period_scores = {}
 
     # Filter entities after fetching
-    filtered_entities = [e for e in entities if e['YahooTicker'] in clean_tickers]
+    if "Banks" in clean_sectors:
+        filtered_entities = entities
+    else:
+        filtered_entities = [e for e in entities if e['YahooTicker'] in clean_tickers]
 
     for entity in filtered_entities:
         period = entity['Period']
