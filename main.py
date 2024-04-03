@@ -40,11 +40,11 @@ def dataplot_placeholder():
 @app.route('/dataplots/data_plot')
 def graph():
     ticker = request.args.get('ticker')
-    industry = request.args.get('industry')
+    sector = request.args.get('sector')
     startmonth = request.args.get('startmonth')
     endmonth = request.args.get('endmonth')
 
-    output = data_plot(ticker=ticker, industry=industry, startmonth=startmonth, endmonth=endmonth)
+    output = data_plot(ticker=ticker, sector=sector, startmonth=startmonth, endmonth=endmonth)
 
     if output == 429:
         output = render_template("429.html")
