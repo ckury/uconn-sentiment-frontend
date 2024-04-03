@@ -2,10 +2,11 @@ from google.cloud import datastore
 import plotly.graph_objs as go
 from plotly.offline import plot
 
-def data_plot(kind='Banks', ticker='WM US', industry=None, startmonth=None, endmonth=None):
+def data_plot(kind='Banks', ticker=None, sector=None, startmonth=None, endmonth=None):
     # Initialize the Datastore client
     client = datastore.Client()
 
+    # Cleaning up the tickers and putting them into a list
     clean_tickers = []
 
     if "," in ticker:
@@ -16,11 +17,22 @@ def data_plot(kind='Banks', ticker='WM US', industry=None, startmonth=None, endm
     else:
         clean_tickers.append(ticker.strip())
 
+    # Cleaning up the sectors and putting them into a list
+    clean_sectors = []
+
+    if "," in sector:
+        sector = sector.split(",")
+        for s in sector:
+            clean_tickers.append(s.strip())
+
+    else:
+        clean_sectors.append(sector.strip())
+
 
 
     # Create a query to fetch entities from the Datastore
     query = client.query(kind=kind)
-    query.order = ['CallDate']
+    query.order = ['YahooTicker']
 
     # Fetch the data
     try:
