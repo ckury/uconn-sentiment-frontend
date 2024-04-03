@@ -71,6 +71,7 @@
       let tickerText = document.getElementById("ticker").value;
       let sectorText = document.getElementById("sector").value;
 
+      let weightedSelect = document.getElementById("weightedSelector").value;
       let graph = document.getElementById("graphType").value;
 
       if (tickerText != "") {
@@ -81,7 +82,15 @@
         sectorText.replace(/%20/g, " ")
       }
 
-      document.getElementById("data_plot").setAttribute("src", "/dataplots/data_plot?ticker=" + tickerText + "&sector=" + sectorText + "&type=" + graph)
+      if (weightedSelect == "Unweighted"){
+        weighted = "False"
+      }
+
+      if (weightedSelect == "Weighted"){
+        weighted = "True"
+      }
+
+      document.getElementById("data_plot").setAttribute("src", "/dataplots/data_plot?ticker=" + tickerText + "&sector=" + sectorText + "&type=" + graph + "&weighted=" + weighted)
 
       showSpinner()
       setTimeout(hideSpinner, 7500)

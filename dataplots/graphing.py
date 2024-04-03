@@ -2,7 +2,7 @@ from google.cloud import datastore
 import plotly.graph_objs as go
 from plotly.offline import plot
 
-def data_plot(kind='Banks', ticker=None, sector=None, startmonth=None, endmonth=None):
+def data_plot(kind='Banks', ticker=None, sector=None, weighted="False", startmonth=None, endmonth=None):
     # Initialize the Datastore client
     client = datastore.Client()
 
@@ -50,10 +50,15 @@ def data_plot(kind='Banks', ticker=None, sector=None, startmonth=None, endmonth=
     else:
         filtered_entities = [e for e in entities if e['YahooTicker'] in clean_tickers]
 
+    if weighted == "True":
+        scoreColumn = "WeightedSentiment"
+    elif weighted == "False":
+        scoreColumn = "Score"
+
     for entity in filtered_entities:
         period = entity['Period']
         category = entity['YahooTicker'] + ": " + entity['Category']
-        score = entity['Score']
+        score = entity[scoreColumn]
 
         if period[0] == "Q":
             quarter = period[1]

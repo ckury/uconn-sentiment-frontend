@@ -43,14 +43,15 @@ def graph():
     ticker = request.args.get('ticker')
     sector = request.args.get('sector')
     graphType = request.args.get('type')
+    weighted = request.args.get('weighted')
     startmonth = request.args.get('startmonth')
     endmonth = request.args.get('endmonth')
 
     if graphType == "icat":
-        output = data_plot(ticker=ticker, sector=sector, startmonth=startmonth, endmonth=endmonth)
+        output = data_plot(ticker=ticker, sector=sector, weighted=weighted, startmonth=startmonth, endmonth=endmonth)
 
     if graphType == "sum":
-        output = data_plot_summary(ticker=ticker, sector=sector, startmonth=startmonth, endmonth=endmonth)
+        output = data_plot_summary(ticker=ticker, sector=sector, weighted=weighted, startmonth=startmonth, endmonth=endmonth)
     
     if output == 429:
         output = render_template("429.html")
