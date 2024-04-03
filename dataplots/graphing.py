@@ -113,7 +113,7 @@ def data_plot(kind='Banks', ticker=None, sector=None, weighted="False", graphtyp
         ))
 
     fig.update_layout(
-        title=f'{weightTitle} Sentiment Scores Over Time by Category for Tickers: ({titleTicker}) and Sectors: ({titleSector})',
+        title=f'{weightTitle} Sentiment Scores Over Time for Tickers: ({titleTicker}) and Sectors: ({titleSector})',
         xaxis_title='Period',
         yaxis_title='Average Sentiment Score',
         legend_title='Categories',
