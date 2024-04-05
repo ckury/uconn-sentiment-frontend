@@ -2,7 +2,7 @@ from google.cloud import datastore
 import plotly.graph_objs as go
 from plotly.offline import plot
 
-def data_plot(kind='Banks', ticker=None, sector=None, weighted="False", graphtype="icat", startmonth=None, endmonth=None):
+def data_plot_category(ticker=None, sector=None, weighted="False", startmonth=None, endmonth=None):
     # Initialize Datastore Client
     client = datastore.Client()
 
@@ -16,7 +16,7 @@ def data_plot(kind='Banks', ticker=None, sector=None, weighted="False", graphtyp
 
     # Try to fetch the data
     try:
-        entities = fetch_data(client=client, kind=kind)
+        entities = fetch_data(client=client, kind="Banks")
 
     # If data fetch fails, return error code
     except:

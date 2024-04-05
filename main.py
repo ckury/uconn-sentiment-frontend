@@ -2,7 +2,8 @@ import os
 
 from flask import Flask, render_template, request, redirect
 from google.cloud import datastore
-from dataplots.graphing import data_plot
+from dataplots.graphing_category import data_plot_category
+from dataplots.graphing_summary import data_plot_summary
 from dataplots.table import data_table
 
 """DASH IMPORTS BEGINING"""
@@ -46,7 +47,11 @@ def graph():
     startmonth = request.args.get('startmonth')
     endmonth = request.args.get('endmonth')
 
-    output = data_plot(ticker=ticker, sector=sector, weighted=weighted, graphtype=graphType, startmonth=startmonth, endmonth=endmonth)
+    if graphType == "icat":
+        output = data_plot_category(ticker=ticker, sector=sector, weighted=weighted, startmonth=startmonth, endmonth=endmonth)
+
+    if graphType == "sum":
+        output = data_plot_summary(ticker=ticker, sector=sector, weighted=weighted, startmonth=startmonth, endmonth=endmonth)
 
     if output == 429:
         output = render_template("429.html")
