@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UConn Sentiment Data Manager</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+
+<body>
+    <div class="logonContainer">
+        <div class="titleBar" id="titleBar">
+            <h1 class="topText titleText">UConn Sentiment Data Manager</h1>
+        </div>
+        <div class="formContent">   
+            <label for="username">Username</label> <br>
+            <input class="loginBox" type="text" name="username" id="username"/>  
+            <br> 
+            <br> 
+            <label for="password">Password</label> <br>
+            <input class="loginBox" type="password" name="password" id="password"/><br><br><br>
+
+            <input type="checkbox" id="remember">
+            <label for="remember">Remember Me for 14 Days</label>
+        </div>
+        <div class="buttonForm">
+            <button class="loginButton">Login</button>
+        </div>
+    </div>
+    <style>
+        body{
+            background-color: hsl(0, 0%, 90%);
+            margin: 0px;
+            padding-top: 12px;
+            padding-left: 0px;
+        }
+        .logonContainer {
+            margin: auto;
+            width: 300px;
+            height: 400px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 10px 20px rgba(0, 0, 0, 0.24);
+        }
+        .titleBar {
+            background-color: hsl(222, 100%, 9%);
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            height: 35%;
+        }
+        .formContent {
+            padding: 12px;
+            height: 49%;
+            box-sizing: border-box;
+        }
+
+        .buttonForm {
+            padding: 12px;
+            height: 16%;
+            box-sizing: border-box;
+        }
+
+        .loginButton {
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 20px;
+            height: 100%;
+            border: 0px;
+            background-color: rgb(156, 255, 182);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        }
+
+        .loginButton:hover:enabled {
+            background-color: rgb(107, 255, 146);
+        }
+
+        .loginButton:active:enabled {
+            background-color: rgb(209, 255, 221);
+        }
+
+        .titleText {
+            text-align: center;
+            padding-top: 35px;
+        }
+
+        .loginBox {
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 6px;
+            border-width: 1px;
+            text-indent: 3px;
+            height: 20pt;
+        }
+    </style>
+</body>

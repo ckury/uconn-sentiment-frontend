@@ -22,6 +22,10 @@ client = datastore.Client()
 def mainpage():
     return redirect("/view_data")
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
 @app.route('/view_data')
 def view_data():
     return render_template('view_data.html')
