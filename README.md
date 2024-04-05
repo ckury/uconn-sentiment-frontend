@@ -1,5 +1,3 @@
-# DEMO BRANCH: This branch exists as a place to hold commits and changes made for the demo for april 5th. This branch is not updated with anything other than changes for the demo and any changes will not be merged into the main branch.
-
 # Sentiment Project Frontend
 This repository holds the code used by Google Cloud Run to host the front-end for the Sentiment project at UConn. The web application is written in python using flask with html pages. Cloud build will automatically run when a commit is pushed to the main branch and automatically deploy it to the Cloud Run service. Other branch commits are ignored and not built
 
