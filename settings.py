@@ -1,0 +1,1 @@
+kindCompanyInfo = 'Company_Info'
