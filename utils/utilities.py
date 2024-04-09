@@ -1,7 +1,3 @@
-import os, sys
-root_path = os.path.abspath('..')
-sys.path.append(root_path)
-
 from settings import kindCOMPANYINFO
 
 from google.cloud import datastore

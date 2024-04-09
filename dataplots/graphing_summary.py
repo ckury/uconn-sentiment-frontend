@@ -1,7 +1,3 @@
-import os, sys
-root_path = os.path.abspath('..')
-sys.path.append(root_path)
-
 from google.cloud import datastore
 import plotly.graph_objs as go
 from plotly.offline import plot

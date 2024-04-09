@@ -1,25 +1,35 @@
 """DASH FILE"""
 
+from google.cloud import datastore
 from dash import dash_table, dcc, html, Input, Output, State, callback
+
+from settings import kindCOMPANYINFO
 
 def company_data_table(companydashapp):
 
-    columns = ["Company Long Name", "Yahoo Ticker", "Industry"]
+    client = datastore.Client()
+
+    query = client.query(kind=kindCOMPANYINFO)
+
+    try:
+        entities = list(query.fetch())
+    
+    except:
+        entities = []
+
+    columns = [{'id':"Yahoo_Ticker", 'name':"Yahoo Ticker"}, {'id': "Sector", 'name': "Sector"}, {'id':"Full_Name", 'name': "Full Name"}]
+
+    data_values = []
+
+    for entity in entities:
+        data_values.append({"Sector": entity.get('Sector'), "Full_Name": entity.get('Full_Name'), "Yahoo_Ticker": entity.get('Yahoo_Ticker')})
 
     companydashapp.layout = html.Div([
 
         dash_table.DataTable(
             id='company-data-table',
-            columns=[{
-                'name': '{}'.format(i),
-                'id': 'column-{}'.format(i),
-                'deletable': False,
-                'renamable': False
-            } for i in columns],
-            data=[
-                {'column-{}'.format(i): (j + (i-1)*5) for i in range(1, 5)}
-                for j in range(5)
-            ],
+            columns=columns,
+            data=data_values,
             editable=True,
             row_deletable=True,
             fixed_rows={'headers': True}, 
