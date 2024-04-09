@@ -5,7 +5,7 @@ sys.path.append(root_path)
 from google.cloud import datastore
 import plotly.graph_objs as go
 from plotly.offline import plot
-from utils.tickers_from_sectors import tickers_from_sectors
+from utils.utilities import tickers_from_sectors, input_cleanup, title_creation
 
 def data_plot_summary(ticker: str | list=None,
                       sector: str | list=None, 
@@ -32,6 +32,11 @@ def data_plot_summary(ticker: str | list=None,
     clean_tickers = input_cleanup(ticker)
     clean_sectors = input_cleanup(sector)
 
+    tickerfilterlist = []
+
+    tickerfilterlist.extend(clean_tickers)
+    tickerfilterlist.extend(tickers_from_sectors(client=client, sectors=clean_sectors))
+
     # Try to fetch the data
     try:
         entities = fetch_ticker_data(client=client, kind="Banks_Summary")
@@ -41,10 +46,7 @@ def data_plot_summary(ticker: str | list=None,
         return 429
 
     # Filter entities after fetching
-    if "BANKS" in clean_sectors: # TODO: Currently this is a temporary workaround, This should be switched to querying for tickers in the sector using the tickers_from_sectors function imported
-        filtered_entities = entities
-    else:
-        filtered_entities = [e for e in entities if e['Yahoo Ticker'] in clean_tickers]
+    filtered_entities = [e for e in entities if e['Yahoo Ticker'] in tickerfilterlist]
 
     # Query entity disection and data arrangement preparation for adding trace to graph. This takes rows and consolidating them into a dictionary with the tickers as kinds.
 
@@ -93,56 +95,6 @@ def data_plot_summary(ticker: str | list=None,
 
     # Return HTML div to main flask app
     return plot(fig, include_plotlyjs=True, output_type='div')
-
-def input_cleanup(input: str | list) -> list:
-    '''
-    This function takes an input string gathered from a URL and removes unnessesary spaces, separates tickers by comma and returns them as list.\n
-    If list is provided, processing is ignored and original list is returned
-    '''
-
-    if input is list:
-        return input
-
-    output = []
-
-    # Multiple tickers separated and cleaned up
-    if "," in input:
-        input = input.split(",")
-        for i in input:
-            output.append(i.strip().upper())
-
-    # Single ticker cleaned up
-    else:
-        output.append(input.strip().upper())
-    
-    return output
-
-def title_creation(tickers: list, sectors: list, weighted: bool) -> str: 
-    output = ""
-
-    if weighted is True: output += 'Weighted '
-    if weighted is False: output += 'Unweighted '
-    
-    output += "Summary Sentiment Scores Over Time Including "
-
-    if '' not in tickers:
-        output += "Tickers: "
-        for t in tickers:
-            output += t
-            output += ', '
-        
-        output = output[:-2]
-        if '' not in sectors:
-            output += " and "
-
-    if '' not in sectors:
-        output += "Sectors: "
-        for s in sectors:
-            output += s
-            output += ', '
-        output = output[:-2]
-
-    return output
 
 def fetch_ticker_data(client: datastore.Client, kind: str) -> list:
     # Create a query to fetch entities from the Datastore

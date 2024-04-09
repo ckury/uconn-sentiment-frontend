@@ -2,6 +2,8 @@ from google.cloud import datastore
 import plotly.graph_objs as go
 from plotly.offline import plot
 
+from utils.utilities import input_cleanup, title_creation, tickers_from_sectors
+
 def data_plot_category(ticker=None, sector=None, weighted="False", startmonth=None, endmonth=None):
     # Initialize Datastore Client
     client = datastore.Client()
@@ -14,9 +16,14 @@ def data_plot_category(ticker=None, sector=None, weighted="False", startmonth=No
     clean_tickers = input_cleanup(ticker)
     clean_sectors = input_cleanup(sector)
 
+    tickerfilterlist = []
+
+    tickerfilterlist.extend(clean_tickers)
+    tickerfilterlist.extend(tickers_from_sectors(client=client, sectors=clean_sectors))
+
     # Try to fetch the data
     try:
-        entities = fetch_data(client=client, kind="Banks")
+        entities = fetch_ticker_data(client=client, kind="Banks")
 
     # If data fetch fails, return error code
     except:
@@ -26,10 +33,7 @@ def data_plot_category(ticker=None, sector=None, weighted="False", startmonth=No
     keyword_period_scores = {}
 
     # Filter entities after fetching
-    if "BANKS" in clean_sectors:
-        filtered_entities = entities
-    else:
-        filtered_entities = [e for e in entities if e['YahooTicker'] in clean_tickers]
+    filtered_entities = [e for e in entities if e['YahooTicker'] in tickerfilterlist]
 
     for entity in filtered_entities:
         period = prepare_period(entity['Period'])
@@ -72,50 +76,7 @@ def data_plot_category(ticker=None, sector=None, weighted="False", startmonth=No
     # Return HTML div
     return plot(fig, include_plotlyjs=True, output_type='div')
 
-def input_cleanup(input):
-    # Cleaning up the tickers and putting them into a list
-    output = []
-
-    # Multiple tickers separated and cleaned up
-    if "," in input:
-        input = input.split(",")
-        for i in input:
-            output.append(i.strip().upper())
-
-    # Single ticker cleaned up
-    else:
-        output.append(input.strip().upper())
-    
-    return output
-
-def title_creation(tickers, sectors, weighted):
-    output = ""
-
-    if weighted is True: output += 'Weighted '
-    if weighted is False: output += 'Unweighted '
-    
-    output += "Sentiment Scores Over Time Including "
-
-    if '' not in tickers:
-        output += "Tickers: "
-        for t in tickers:
-            output += t
-            output += ', '
-        
-        output = output[:-2]
-        if '' not in sectors:
-            output += " and "
-
-    if '' not in sectors:
-        output += "Sectors: "
-        for s in sectors:
-            output += s
-            output += ', '
-        output = output[:-2]
-
-    return output
-
-def fetch_data(client, kind):
+def fetch_ticker_data(client: datastore.Client, kind: str) -> list:
     # Create a query to fetch entities from the Datastore
     query = client.query(kind=kind)
     query.order = ['YahooTicker']
@@ -134,6 +95,3 @@ def prepare_period(input):
         output = input
 
     return output
-
-def tickers_from_sectors(client, sector):
-    return

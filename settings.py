@@ -1,1 +1,1 @@
-kindCompanyInfo = 'Company_Info'
+kindCOMPANYINFO = 'Company_Info'
