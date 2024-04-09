@@ -114,7 +114,6 @@ def submit_company_info():
     return render_template('index.html')
 
 """DASH BEGINNING"""
-
 dashapp_company = dash.Dash(server=False, routes_pathname_prefix="/dataplots/company_data_table/")
 
 company_data_table(dashapp_company)
