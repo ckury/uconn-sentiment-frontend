@@ -37,12 +37,43 @@
   <select name="weightedSelector" id="weightedSelector">
     <option value="Unweighted">Unweighted</option>
     <option value="Weighted">Weighted</option>
-  </select><br><br>
+  </select>
   
-  <label>View:</label>
   <select name="graphType" id="graphType">
-    <option value="icat">Individual Category Data</option>
+    <option value="icat">Category Data</option>
     <option value="sum">Summary Data</option>
+  </select><br><br>
+
+  <label>Period Range: From</label>
+  <select name="startQuarter" id="startQuarter">
+    <option value="Q1">Q1</option>
+    <option value="Q2">Q2</option>
+    <option value="Q3">Q3</option>
+    <option value="Q4">Q4</option>
+  </select>
+
+  <select name="startYear" id="startYear">
+    <option value="2020">2020</option>
+    <option value="2021">2021</option>
+    <option value="2022">2022</option>
+    <option value="2023">2023</option>
+    <option value="2024">2024</option>
+  </select>
+  
+  <label>To</label>
+  <select name="endQuarter" id="endQuarter">
+    <option value="Q1">Q1</option>
+    <option value="Q2">Q2</option>
+    <option value="Q3">Q3</option>
+    <option value="Q4" selected>Q4</option>
+  </select>
+
+  <select name="endYear" id="endYear">
+    <option value="2020">2020</option>
+    <option value="2021">2021</option>
+    <option value="2022">2022</option>
+    <option value="2023">2023</option>
+    <option value="2024" selected>2024</option>
   </select><br><br>
 
   <input class="submitButton" id="viewPlot" type="button" value="View Plot" onclick="viewPlot()">
