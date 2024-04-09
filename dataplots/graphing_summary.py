@@ -5,7 +5,7 @@ sys.path.append(root_path)
 from google.cloud import datastore
 import plotly.graph_objs as go
 from plotly.offline import plot
-from utils.utilities import tickers_from_sectors, input_cleanup, title_creation
+from utils.utilities import tickers_from_sectors, input_cleanup, title_creation, prepare_period
 
 def data_plot_summary(ticker: str | list=None,
                       sector: str | list=None, 
@@ -103,18 +103,3 @@ def fetch_ticker_data(client: datastore.Client, kind: str) -> list:
     
     # Return a list of the entities
     return list(query.fetch())
-
-def prepare_period(input: str) -> str:
-    '''
-    This function outputs period in the form of YYYYQQ whether input is QQYYYY or YYYYQQ
-    '''
-    if input[0] == "Q":
-        quarter = input[1]
-        output = input[2:]
-
-        output += "Q" + quarter
-
-    else:
-        output = input
-
-    return output

@@ -2,7 +2,7 @@ from google.cloud import datastore
 import plotly.graph_objs as go
 from plotly.offline import plot
 
-from utils.utilities import input_cleanup, title_creation, tickers_from_sectors
+from utils.utilities import input_cleanup, title_creation, tickers_from_sectors, prepare_period
 
 def data_plot_category(ticker=None, sector=None, weighted="False", startmonth=None, endmonth=None):
     # Initialize Datastore Client
@@ -83,15 +83,3 @@ def fetch_ticker_data(client: datastore.Client, kind: str) -> list:
     
     # Return a list of the entities
     return list(query.fetch())
-
-def prepare_period(input):
-    if input[0] == "Q":
-        quarter = input[1]
-        output = input[2:]
-
-        output += "Q" + quarter
-
-    else:
-        output = input
-
-    return output

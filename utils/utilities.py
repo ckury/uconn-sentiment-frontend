@@ -69,3 +69,17 @@ def title_creation(tickers, sectors, weighted):
 
     return output
 
+def prepare_period(input: str) -> str:
+    '''
+    This function outputs period in the form of YYYYQQ whether input is QQYYYY or YYYYQQ
+    '''
+    if input[0] == "Q":
+        quarter = input[1]
+        output = input[2:]
+
+        output += "Q" + quarter
+
+    else:
+        output = input
+
+    return output
