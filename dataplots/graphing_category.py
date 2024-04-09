@@ -1,16 +1,28 @@
 from google.cloud import datastore
 import plotly.graph_objs as go
 from plotly.offline import plot
-
 from utils.utilities import input_cleanup, title_creation, tickers_from_sectors, prepare_period
 
-def data_plot_category(ticker=None, sector=None, weighted="False", startmonth=None, endmonth=None):
+def data_plot_category(ticker: str | list=None, 
+                       sector: str | list=None, 
+                       weighted: str | bool="False", 
+                       startmonth=None, 
+                       endmonth=None) -> str:
+    '''
+    This function takes in tickers and/or sectors with filtering options and returns a graph HTML div in the form of a str \n
+    Note: This graph pulls from category data kind in GCP and displays each category for each ticker as a separate trace on graph. The sectors 
+    are flattened into individual tickers and are displayed as if they were inputted individually 
+    '''
+    
+    # Initialize plotly graph instance
+    fig = go.Figure()
+
     # Initialize Datastore Client
     client = datastore.Client()
 
     # Converting string provided by URL to boolean value
-    if weighted == "True": weighted = True; scoreColumn = "WeightedSentiment"
-    if weighted == "False": weighted = False; scoreColumn = "Score"
+    if weighted == [True, "True"]: weighted = True; scoreColumn = "WeightedSentiment"
+    if weighted == [False, "False"]: weighted = False; scoreColumn = "Score"
 
     # Cleanup tickers and sectors and put them in correct format
     clean_tickers = input_cleanup(ticker)
@@ -25,15 +37,14 @@ def data_plot_category(ticker=None, sector=None, weighted="False", startmonth=No
     try:
         entities = fetch_ticker_data(client=client, kind="Banks")
 
-    # If data fetch fails, return error code
+    # If data fetch fails, return catch error and provide error code as response
     except:
         return 429
 
-    # Prepare the data for plotting
-    keyword_period_scores = {}
-
     # Filter entities after fetching
     filtered_entities = [e for e in entities if e['YahooTicker'] in tickerfilterlist]
+
+    keyword_period_scores = {}
 
     for entity in filtered_entities:
         period = prepare_period(entity['Period'])
@@ -48,8 +59,6 @@ def data_plot_category(ticker=None, sector=None, weighted="False", startmonth=No
         else:
             keyword_period_scores[category][period] = [score]
 
-    # Prepare the Plotly graph
-    fig = go.Figure()
 
     for category, period_scores in keyword_period_scores.items():
         unique_periods = sorted(period_scores.keys())
@@ -64,6 +73,8 @@ def data_plot_category(ticker=None, sector=None, weighted="False", startmonth=No
             name=category
         ))
 
+    # Add layout configurations to the graph
+
     fig.update_layout(
         title=title_creation(clean_tickers, clean_sectors, weighted),
         xaxis_title='Period',
@@ -73,7 +84,7 @@ def data_plot_category(ticker=None, sector=None, weighted="False", startmonth=No
         yaxis_range=[-1, 1]
     )
 
-    # Return HTML div
+    # Return HTML div to main flask app
     return plot(fig, include_plotlyjs=True, output_type='div')
 
 def fetch_ticker_data(client: datastore.Client, kind: str) -> list:

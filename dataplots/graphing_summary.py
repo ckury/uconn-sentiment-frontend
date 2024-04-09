@@ -1,7 +1,7 @@
 from google.cloud import datastore
 import plotly.graph_objs as go
 from plotly.offline import plot
-from utils.utilities import tickers_from_sectors, input_cleanup, title_creation, prepare_period
+from utils.utilities import input_cleanup, title_creation, tickers_from_sectors, prepare_period
 
 def data_plot_summary(ticker: str | list=None,
                       sector: str | list=None, 
