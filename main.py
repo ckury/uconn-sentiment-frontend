@@ -115,14 +115,17 @@ def submit_company_info():
 
 """DASH BEGINNING"""
 
-# dashapp_company = dash.Dash(server=app, routes_pathname_prefix="/dataplots/company_data_table/")
+dashapp_company = dash.Dash(server=False, routes_pathname_prefix="/dataplots/company_data_table/")
 
-# company_data_table(dashapp_company)
+company_data_table(dashapp_company)
 
-dashapp_topic = dash.Dash(server=app, routes_pathname_prefix="/dataplots/topic_data_table/")
+dashapp_company.init_app(app=app)
+
+dashapp_topic = dash.Dash(server=False, routes_pathname_prefix="/dataplots/topic_data_table/")
 
 topic_data_table(dashapp_topic)
 
+dashapp_topic.init_app(app=app)
 """DASH ENDING"""
 
 if __name__ == '__main__':
