@@ -6,78 +6,107 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UConn Sentiment Data Manager</title>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 
 <body>
 
-    <div class="menuBar">
-      <h1 class="topText">UConn Sentiment Data Manager</h1>
-    
-      <hr>
+  <div class="menuBar">
+    <h1 class="topText">UConn Sentiment Data Manager</h1>
+
+    <hr>
+  </div>
+
+  <div class="sideNav" id="sideNav">
+    <a href="company_info"><button class="menuButton"><span
+          class="material-symbols-outlined">add_business</span></button></a>
+    <a href="topics"><button class="menuButton"><span class="material-symbols-outlined">fact_check</span></button></a>
+    <a href="view_data"><button class="menuButton"><span
+          class="material-symbols-outlined">query_stats</span></button></a>
+    <button class="menuButton" type="button" disabled><span
+        class="material-symbols-outlined">developer_board</span></button>
+
+    <a href="#"><button class="logoutButton"><span class="material-symbols-outlined">logout</span></button></a>
+  </div>
+
+  <div id="div-page-mask" style="display: none;"></div>
+
+  <div id="div-main-content">
+    <h2>Model Control</h2>
+
+    <div id="div-create-task">
+      <h4>Note: Each ticker should be it's own task, but mutliple conference calls can be processed at once as long as
+        they all use the same keyword list</h4>
+      <h3>Step 1. Input</h3>
+      <button onclick="showUploadDialog()">Upload File</button>
+      <dialog open id="dialog-upload_file" style="display: none;">
+        <iframe src="/upload_prompt" style="border: none;" scrolling="no"></iframe>
+      </dialog><br><br>
+
+      <label>Select Data:</label>
+      <input type="text" id="inputFileBox">
+      <button>...</button>
+
+      <h3>Step 2. Settings</h3>
+      <label>Company Info Selection:</label>
+      <input type="text" id="yahooTickerBox">
+      <button>...</button><br><br>
+
+      <label>Keyword List</label>
+      <input type="text" id="keywordListBox">
+      <button>...</button><br><br>
+
+      <h3>Step 3. Confirm and Output</h3>
+      <label>Kind output:</label>
+      <input type="text" disabled><br><br>
+
+      <button class="submitButton" onclick="submitTask()">Submit for Processing</button>
+
+      <a id="success" style="color: rgb(0, 198, 53);"><span class="material-symbols-outlined">done</span> Create Task
+        Success</a>
+      <a id="failed" style="color: hsl(0, 100%, 39%);"><span class="material-symbols-outlined">close</span> Create Task
+        Failed:</a>
+
     </div>
-  
-    <div class="sideNav" id="sideNav">
-      <a href="company_info"><button class="menuButton"><span class="material-symbols-outlined">add_business</span></button></a>
-      <a href="topics"><button class="menuButton"><span class="material-symbols-outlined">fact_check</span></button></a>
-      <a href="view_data"><button class="menuButton"><span class="material-symbols-outlined">query_stats</span></button></a>
-      <button class="menuButton" type="button" disabled><span class="material-symbols-outlined">developer_board</span></button>
-  
-      <a href="#"><button class="logoutButton"><span class="material-symbols-outlined">logout</span></button></a>
-    </div>
-    
-    <div id="div-page-mask" style="display: none;"></div>
+  </div>
 
-    <div id="div-main-content">
-      <h2>Model Control</h2>
+  <script>
+    function maskPage() {
+      document.getElementById("div-page-mask").style.display = "block"
+    }
+    function unmaskPage() {
+      document.getElementById("div-page-mask").style.display = "none"
+    }
 
-      <div id="div-create-task">
-        <h4>Note: Each ticker should be it's own task, but mutliple conference calls can be processed at once as long as they all use the same keyword list</h4>
-        <h3>Step 1. Input</h3>
-        <button onclick="showUploadDialog()">Upload File</button>
-        <dialog open id="dialog-upload_file" style="display: none;">
-          <iframe src="/upload_prompt" style="border: none;" scrolling="no"></iframe>
-        </dialog><br><br>
+    function showUploadDialog() {
+      maskPage()
+      document.getElementById("dialog-upload_file").style.display = "block"
+    }
+    function hideUploadDialog() {
+      unmaskPage()
+      document.getElementById("dialog-upload_file").style.display = "none"
+    }
 
-        <label>Select Data:</label>
-        <input type="text" disabled>
-        <button>...</button>
+    function submitTask() {
+      yahooTicker = document.getElementById("yahooTickerBox").value
+      inputFile = document.getElementById("inputFileBox").value
+      keywordList = document.getElementById("keywordListBox").value
 
-        <h3>Step 2. Settings</h3>
-        <label>Company Info Selection:</label>
-        <input type="text" disabled>
-        <button>...</button><br><br>
-
-        <label>Keyword List</label>
-        <input type="text" disabled>
-        <button>...</button><br><br>
-
-        <h3>Step 3. Confirm and Output</h3>
-        <label>Kind output:</label>
-        <input type="text" disabled><br><br>
-
-        <button class="submitButton">Submit for Processing</button>
-
-      </div>
-    </div>
-
-    <script>
-      function maskPage(){
-        document.getElementById("div-page-mask").style.display = "block"
-      }
-      function unmaskPage(){
-        document.getElementById("div-page-mask").style.display = "none"
-      }
-
-      function showUploadDialog(){
-        maskPage()
-        document.getElementById("dialog-upload_file").style.display = "block"
-      }
-      function hideUploadDialog(){
-        unmaskPage()
-        document.getElementById("dialog-upload_file").style.display = "none"
-      }
-    </script>
+      fetch("/create_task", {
+        method: "post",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          yahooTicker: yahooTicker,
+          inputFile: inputFile,
+          keywordList: keywordList,
+        })
+      })
+    }
+  </script>
 
 </body>
+
 </html>

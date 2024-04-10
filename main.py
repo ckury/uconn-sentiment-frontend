@@ -18,7 +18,7 @@ from settings import bucketUPLOAD
 app = Flask(__name__)
 
 # Initialize the Datastore client
-client = datastore.Client()
+datastoreClient = datastore.Client()
 storageClient = storage.Client()
 
 @app.route('/')
@@ -95,7 +95,7 @@ def submit_company_info():
         long_name = request.form['long_name']
 
         # Check if the Yahoo ticker already exists in the database
-        query = client.query(kind='CompanyInfo')
+        query = datastoreClient.query(kind='CompanyInfo')
         query.add_filter('YahooTicker', '=', yahoo_ticker)
         results = list(query.fetch(limit=1))
 
@@ -107,24 +107,24 @@ def submit_company_info():
                 'Industry': industry,
                 'LongName': long_name,
             })
-            client.put(company_entity)
+            datastoreClient.put(company_entity)
             return 'Yahoo ticker information updated successfully!'
         else:
             # If the ticker doesn't exist, create a new entity
-            key = client.key('CompanyInfo')
+            key = datastoreClient.key('CompanyInfo')
             company_entity = datastore.Entity(key=key)
             company_entity.update({
                 'YahooTicker': yahoo_ticker,
                 'Industry': industry,
                 'LongName': long_name,
             })
-            client.put(company_entity)
+            datastoreClient.put(company_entity)
             return 'Company information submitted successfully!'
 
     # If the request method is not POST, just return the form page
     return render_template('index.html')
 
-@app.route('/upload_file', methods = ['POST'])
+@app.route('/upload_file', methods=['POST'])
 def upload_file():
     if request.method == 'POST':
         f = request.files['file_upload']
@@ -134,6 +134,31 @@ def upload_file():
 
         blob.upload_from_file(f)
     return render_template('upload_success.html')
+
+@app.route('/create_task', methods=['POST'])
+def create_task():
+    if request.method == 'POST':
+        json = request.get_json()
+
+        yahooTicker = json.get('yahooTicker')
+        inputFile = json.get('inputFile')
+        keywordList = json.get('keywordList')
+
+        data = {"Yahoo_Ticker": yahooTicker, "Input_File": inputFile, "Keyword_List": keywordList}
+
+        entity = datastoreClient.entity(datastoreClient.key("Task_List"))
+
+        entity.update(data)
+
+        try:
+            datastoreClient.put(entity=entity)
+            entityId = entity.key.id
+        
+        except:
+            return
+
+        # Create and Start VM
+        return str(entityId)
 
 """DASH BEGINNING"""
 dashapp_company = dash.Dash(server=False, routes_pathname_prefix="/dataplots/company_data_table/")
