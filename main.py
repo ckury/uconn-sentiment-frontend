@@ -130,7 +130,7 @@ def upload_file():
         f = request.files['file_upload']
 
         bucket = storageClient.get_bucket(bucketUPLOAD)
-        blob = bucket.blob(f.filename)
+        blob = bucket.blob("Raw_CC/" + f.filename)
 
         blob.upload_from_file(f)
     return render_template('upload_success.html')
