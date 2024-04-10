@@ -25,8 +25,58 @@
   
       <a href="#"><button class="logoutButton"><span class="material-symbols-outlined">logout</span></button></a>
     </div>
+    
+    <div id="div-page-mask" style="display: none;"></div>
 
-    <iframe src="/upload_prompt" style="border: none;"></iframe>
+    <div id="div-main-content">
+      <h2>Model Control</h2>
+
+      <div id="div-create-task">
+        <h3>Step 1. Input</h3>
+        <button onclick="showUploadDialog()">Upload File</button>
+        <dialog open id="dialog-upload_file" style="display: none;">
+          <iframe src="/upload_prompt" style="border: none;" scrolling="no"></iframe>
+        </dialog><br><br>
+
+        <label>Select Data:</label>
+        <input type="text" disabled>
+        <button>...</button>
+
+        <h3>Step 2. Settings</h3>
+        <label>Company Info Selection:</label>
+        <input type="text" disabled>
+        <button>...</button><br><br>
+
+        <label>Keyword List</label>
+        <input type="text" disabled>
+        <button>...</button><br><br>
+
+        <h3>Step 3. Confirm and Output</h3>
+        <label>Kind output:</label>
+        <input type="text" disabled><br><br>
+
+        <button class="submitButton">Submit for Processing</button>
+
+      </div>
+    </div>
+
+    <script>
+      function maskPage(){
+        document.getElementById("div-page-mask").style.display = "block"
+      }
+      function unmaskPage(){
+        document.getElementById("div-page-mask").style.display = "none"
+      }
+
+      function showUploadDialog(){
+        maskPage()
+        document.getElementById("dialog-upload_file").style.display = "block"
+      }
+      function hideUploadDialog(){
+        unmaskPage()
+        document.getElementById("dialog-upload_file").style.display = "none"
+      }
+    </script>
 
 </body>
 </html>

@@ -16,15 +16,24 @@
 </head>
 
 <body>
+    <button onclick="parent.hideUploadDialog()">X</button>
+    <label style="font-weight: bold;">Upload File</label><hr>
     <form action="/upload_file" method="post" enctype="multipart/form-data">
-        <input type="file" id="file_upload" name="file_upload"><br>
-        <label for="file_upload">Max size: 2MB</label><br>
-        <input type="submit" value="Upload">
+        <label for="filetype">File Type:</label>
+        <select name="filetype" id="filetype">
+            <option value="CC">Conference Call Transcript</option>
+        </select><br><br>
+        <input type="file" id="file_upload" name="file_upload"><br><br>
+        <input id="submit" type="submit" value="Upload" disabled>
+        <label>Max size: 2MB</label>
     </form>
 </body>
 <script>
     file_upload.onchange = function () {
-        if (this.files[0].size > 2097152) {
+        if (this.files[0].size < 2097152) {
+            document.getElementById("submit").disabled = false
+        }
+        else {
             alert("File is larger than 2MB");
             this.value = "";
         }
