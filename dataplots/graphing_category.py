@@ -5,7 +5,7 @@ from utils.utilities import input_cleanup, title_creation, tickers_from_sectors,
 
 def data_plot_category(ticker: str | list=None, 
                        sector: str | list=None, 
-                       weighted: str | bool="False", 
+                       weighted: str | bool=False, 
                        startmonth=None, 
                        endmonth=None) -> str:
     '''
@@ -21,8 +21,8 @@ def data_plot_category(ticker: str | list=None,
     client = datastore.Client()
 
     # Converting string provided by URL to boolean value
-    if weighted == [True, "True"]: weighted = True; scoreColumn = "WeightedSentiment"
-    if weighted == [False, "False"]: weighted = False; scoreColumn = "Score"
+    if weighted in [True, "True"]: weighted = True; scoreColumn = "WeightedSentiment"
+    if weighted in [False, "False"]: weighted = False; scoreColumn = "Score"
 
     # Cleanup tickers and sectors and put them in correct format
     clean_tickers = input_cleanup(ticker)
