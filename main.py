@@ -37,6 +37,10 @@ def control():
 def view_data():
     return render_template('view_data.html')
 
+@app.route('/upload_prompt')
+def upload_prompt():
+    return render_template('upload_prompt.html')
+
 @app.route('/company_info')
 def company_info():
     return render_template('company_info.html')
@@ -129,7 +133,7 @@ def upload_file():
         blob = bucket.blob(f.filename)
 
         blob.upload_from_file(f)
-    return
+    return render_template('upload_success.html')
 
 """DASH BEGINNING"""
 dashapp_company = dash.Dash(server=False, routes_pathname_prefix="/dataplots/company_data_table/")
