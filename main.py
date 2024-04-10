@@ -26,6 +26,10 @@ def mainpage():
 def login():
     return render_template('login.html')
 
+@app.route('/control')
+def control():
+    return render_template('control.html')
+
 @app.route('/view_data')
 def view_data():
     return render_template('view_data.html')
