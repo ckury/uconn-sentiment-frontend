@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, render_template, request, redirect
-from google.cloud import datastore
+from google.cloud import datastore, storage
 from dataplots.graphing_category import data_plot_category
 from dataplots.graphing_summary import data_plot_summary
 from dataplots.table import data_table
@@ -12,11 +12,14 @@ from dataplots.company_data_table import company_data_table
 from dataplots.topic_data_table import topic_data_table
 """DASH IMPORTS ENDING"""
 
+from settings import bucketUPLOAD
+
 
 app = Flask(__name__)
 
 # Initialize the Datastore client
 client = datastore.Client()
+storageClient = storage.Client()
 
 @app.route('/')
 def mainpage():
@@ -116,6 +119,17 @@ def submit_company_info():
 
     # If the request method is not POST, just return the form page
     return render_template('index.html')
+
+@app.route('/upload_file', methods = ['POST'])
+def upload_file():
+    if request.method == 'POST':
+        f = request.files['file_upload']
+
+        bucket = storageClient.get_bucket(bucketUPLOAD)
+        blob = bucket.blob(f.filename)
+
+        blob.upload_from_file(f)
+    return
 
 """DASH BEGINNING"""
 dashapp_company = dash.Dash(server=False, routes_pathname_prefix="/dataplots/company_data_table/")

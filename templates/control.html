@@ -25,7 +25,10 @@
       <a href="#"><button class="logoutButton"><span class="material-symbols-outlined">logout</span></button></a>
     </div>
 
-    <form action="/"
+    <form action="/upload_file" method="post" enctype="multipart/form-data">
+        <input type="file" id="file_upload" name="file_upload">
+        <input type="submit" value="Upload">
+    </form>
 
 </body>
 </html>
