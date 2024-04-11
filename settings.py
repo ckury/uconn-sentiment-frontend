@@ -8,7 +8,6 @@ computeINSTANCETEMPLATEURL = "global/instanceTemplates/production-model-vm-templ
 computePROJECTID = "sentiment-analysis-379200"
 computeSTARTUPSCRIPT = """#! /bin/bash
 cd /
-apt -y install git
-git clone https://github.com/ckury/uconn-sentiment-automation
-apt update
+curl -o startup-script.sh https://raw.githubusercontent.com/ckury/uconn-sentiment-automation/main/startup-script.sh
+bash startup-script.sh
 """
