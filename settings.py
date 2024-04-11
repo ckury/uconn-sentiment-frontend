@@ -8,6 +8,6 @@ computeINSTANCETEMPLATEURL = "global/instanceTemplates/production-model-vm-templ
 computePROJECTID = "sentiment-analysis-379200"
 computeSTARTUPSCRIPT = """#! /bin/bash
 cd /
-curl -o startup-script.sh https://raw.githubusercontent.com/ckury/uconn-sentiment-automation/main/startup-script.sh
+curl -H 'Cache-Control: no-cache, no-store' -o startup-script.sh https://raw.githubusercontent.com/ckury/uconn-sentiment-automation/main/startup-script.sh
 bash startup-script.sh
 """
