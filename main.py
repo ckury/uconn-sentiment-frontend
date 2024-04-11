@@ -145,7 +145,7 @@ def create_task():
         inputFile = json.get('inputFile')
         keywordList = json.get('keywordList')
 
-        data = {"Yahoo_Ticker": yahooTicker, "Input_File": inputFile, "Keyword_List": keywordList}
+        data = {"Yahoo_Ticker": yahooTicker, "Input_File": inputFile, "Keyword_List": keywordList, "Status": "Waiting", "Status_Message": "Waiting for VM to claim task and start processing"}
 
         entity = datastoreClient.entity(datastoreClient.key("Task_List"))
 
