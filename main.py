@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, render_template, request, redirect
-from google.cloud import datastore, storage
+from google.cloud import datastore, storage, compute_v1
 from dataplots.graphing_category import data_plot_category
 from dataplots.graphing_summary import data_plot_summary
 from dataplots.table import data_table
@@ -12,7 +12,7 @@ from dataplots.company_data_table import company_data_table
 from dataplots.topic_data_table import topic_data_table
 """DASH IMPORTS ENDING"""
 
-from settings import bucketUPLOAD
+from settings import bucketUPLOAD, computeZONE, computeINSTANCETEMPLATEURL, computePROJECTID, computeSTARTUPSCRIPT
 
 
 app = Flask(__name__)
@@ -20,6 +20,7 @@ app = Flask(__name__)
 # Initialize the Datastore client
 datastoreClient = datastore.Client()
 storageClient = storage.Client()
+computeClient = compute_v1.InstancesClient()
 
 @app.route('/')
 def mainpage():
@@ -156,9 +157,27 @@ def create_task():
         
         except:
             return
+        
+        metadata = compute_v1.Metadata()
+        items = compute_v1.Items()
+        items.key = "startup-script"
+        items.value = computeSTARTUPSCRIPT
+        metadata.items = [items]
+        
+        instance = compute_v1.InsertInstanceRequest()
+
+        instance.project = computePROJECTID
+        instance.instance_resource.name = f'production-automatic-{entityId}'
+        instance.zone = computeZONE
+        instance.source_instance_template = computeINSTANCETEMPLATEURL
+        
+        instance.instance_resource.metadata = metadata
+
+        requestCompute = computeClient.insert(instance)
+        operation = requestCompute.result()
 
         # Create and Start VM
-        return str(entityId)
+        return str(entityId) + str(operation)
 
 """DASH BEGINNING"""
 dashapp_company = dash.Dash(server=False, routes_pathname_prefix="/dataplots/company_data_table/")
