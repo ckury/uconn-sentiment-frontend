@@ -180,6 +180,22 @@ def create_task():
         # Create and Start VM
         return str(entityId) + str(operation)
 
+@app.route('/get_keywords', methods=['GET'])
+def get_keywords():
+    keyword_list = request.args.get('list')
+
+    query = datastoreClient.query(kind=keyword_list, namespace=datastoreNAMESPACEKEYWORDS)
+
+    query.order = ['Keyword']
+
+    output = []
+
+    for e in query.fetch():
+        output.append((e["Keyword"], e["Category"]))
+
+    return output
+
+
 """DASH BEGINNING"""
 dashapp_company = dash.Dash(server=False, routes_pathname_prefix="/dataplots/company_data_table/")
 

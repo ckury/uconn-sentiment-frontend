@@ -51,7 +51,8 @@
         <input type="submit" value="Submit">
     </form><br> -->
 <h3>Select list:</h3>
-<select>
+<select id='listSelector' onchange="getList(this)">
+    <option value="" disabled selected>Select List</option>
     {% for kind in kinds %}
     <option value="{{  kind  }}">{{ kind }}</option>
     {% endfor %}
@@ -77,30 +78,20 @@
 <h3>View/Edit Data:</h3>
 
 <div id="div-keyword-table" class="editable-table">
-    <table>
+    <table id="table-keyword-table">
         <thead>
             <tr>
-                <th scope="col" style="min-width: 20px;">Keyword</th>
-                <th scope="col" style="min-width: 20px;">Category</th>
-                <th scope="col" style="max-width: 64px;"></th>
+                <th scope="col">Keyword</th>
+                <th scope="col">Category</th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td contenteditable="true">test</td>
-                <td contenteditable="true">test2</td>
-                <td><button class="logoutButton" style="top: 0; margin: 2px;"><span class="material-symbols-outlined" onclick="">close</span></button></td>
-            </tr>
-            <tr>
-                <td contenteditable="true">test</td>
-                <td contenteditable="true">test2</td>
-                <td><button class="logoutButton" style="top: 0; margin: 2px;"><span class="material-symbols-outlined" onclick="">close</span></button></td>
-            </tr>
         </tbody>
     </table>
     <br>
-    <button type="button" onclick="" class="submitButton"><span class="material-symbols-outlined">add</span></button>
-    <button type="button" onclick="" class="submitButton"><span class="material-symbols-outlined">restart_alt</span></button>
+    <button type="button" onclick="addRow()" class="submitButton"><span class="material-symbols-outlined">add</span></button>
+    <button type="button" onclick="getList(document.getElementById('listSelector'))" class="submitButton"><span class="material-symbols-outlined">restart_alt</span></button>
     <button type="button" onclick="" class="submitButton"><span class="material-symbols-outlined">save</span></button>
 </div>
 
@@ -127,6 +118,50 @@
     function hideDeleteListDialog() {
         unmaskPage()
         document.getElementById('dialogDeleteList').style.display = "none"
+    }
+
+    function addRow(col1 = "", col2 = "") {
+        var new_row = document.getElementById('table-keyword-table').getElementsByTagName('tbody')[0].insertRow()
+        new_row.insertCell(0).innerHTML = col1
+        new_row.insertCell(1).innerHTML = col2
+        new_row.insertCell(2).innerHTML = '<button class="logoutButton" style="top: 0; margin: 2px;" onclick="deleteRow(this)"><span class="material-symbols-outlined" onclick="">close</span></button>'
+    }
+    function deleteRow(r) {
+        var i = r.parentNode.parentNode.rowIndex;
+        document.getElementById("table-keyword-table").deleteRow(i);
+    }
+
+    function getList(r) {
+        value = r.value
+
+        table = document.getElementById('table-keyword-table')
+
+        for(var i = 1;i<table.rows.length;){
+            table.deleteRow(i);
+        }
+
+        if (value == "") {
+            return
+        }
+
+        fetch("/get_keywords?" + new URLSearchParams({list: value}), {
+            method: "GET",
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`)
+            }
+            return response.json()
+        })
+        .then(data => {
+            for (let i = 0; i < data.length; i++){
+                row = data[i]
+                addRow(row[0], row[1])
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        });
     }
 </script>
 
