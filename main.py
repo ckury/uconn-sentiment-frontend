@@ -9,10 +9,11 @@ from dataplots.table import data_table
 """DASH IMPORTS BEGINING"""
 from dash import dash, html
 from dataplots.company_data_table import company_data_table
-from dataplots.topic_data_table import topic_data_table
+from dataplots.keyword_data_table import keyword_data_table
 """DASH IMPORTS ENDING"""
 
-from settings import bucketUPLOAD, computeZONE, computeINSTANCETEMPLATEURL, computePROJECTID, computeSTARTUPSCRIPT
+from settings import bucketUPLOAD, computeZONE, computeINSTANCETEMPLATEURL, computePROJECTID, computeSTARTUPSCRIPT, datastoreNAMESPACEKEYWORDS
+from utils.utilities import get_kinds
 
 
 app = Flask(__name__)
@@ -46,9 +47,10 @@ def upload_prompt():
 def company_info():
     return render_template('company_info.html')
 
-@app.route('/topics')
+@app.route('/keyword_lists')
 def topics():
-    return render_template('topics.html')
+    kinds = get_kinds(datastoreClient, datastoreNAMESPACEKEYWORDS)
+    return render_template('keyword_lists.html', kinds=kinds)
 
 @app.route('/dataplot_placeholder')
 def dataplot_placeholder():
@@ -188,7 +190,7 @@ dashapp_company.init_app(app=app)
 
 dashapp_topic = dash.Dash(server=False, routes_pathname_prefix="/dataplots/topic_data_table/")
 
-topic_data_table(dashapp_topic)
+keyword_data_table(dashapp_topic)
 
 dashapp_topic.init_app(app=app)
 """DASH ENDING"""
