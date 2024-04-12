@@ -35,7 +35,7 @@ def data_plot_category(ticker: str | list=None,
 
     # Try to fetch the data
     try:
-        entities = fetch_ticker_data(client=client, kind="Banks")
+        entities = fetch_ticker_data(client=client, kind="Banks_New")
 
     # If data fetch fails, return catch error and provide error code as response
     except:
