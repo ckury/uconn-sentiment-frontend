@@ -79,3 +79,10 @@ def prepare_period(input: str) -> str:
         output = input
 
     return output
+
+def get_kinds(client: datastore.Client, namespace: str=None) -> list:
+    query = client.query(kind='__kind__', namespace=namespace)
+    query.keys_only()
+
+    output = [entity.key.id_or_name for entity in query.fetch()]
+    return output
