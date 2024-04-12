@@ -3,7 +3,7 @@
 from google.cloud import datastore
 from dash import dash_table, dcc, html, Input, Output, State, callback
 
-def topic_data_table(topicdashapp):
+def keyword_data_table(topicdashapp):
 
     client = datastore.Client()
 
@@ -15,12 +15,12 @@ def topic_data_table(topicdashapp):
     except:
         entities = []
 
-    columns = [{'id': "Sector", 'name': "Sector"}, {'id':"Classification", 'name': "Classification"}, {'id':"Keyword", 'name':"Keyword"}]
+    columns = [{'id':"Keyword", 'name':"Keyword"}, {'id':"Category", 'name': "Category"}]
 
     data_values = []
 
     for entity in entities:
-        data_values.append({"Sector": entity.get('Sector'), "Classification": entity.get('classification'), "Keyword": entity.get('keyword')})
+        data_values.append({"Keyword": entity.get('Keyword'), "Category": entity.get('Category')})
 
     topicdashapp.layout = html.Div([
 

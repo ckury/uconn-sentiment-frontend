@@ -10,7 +10,7 @@
 </head>
 
 <div class="menuBar">
-<h1 class="topText">UConn Sentiment Data Manager</h
+<h1 class="topText">UConn Sentiment Data Manager</h1>
 
 <!-- Menu Buttons -->
 
@@ -21,11 +21,14 @@
     <a href="company_info"><button class="menuButton"><span class="material-symbols-outlined">add_business</span></button></a>
     <button class="menuButton" type="button" disabled><span class="material-symbols-outlined">fact_check</span></button>
     <a href="view_data"><button class="menuButton"><span class="material-symbols-outlined">query_stats</span></button></a>
+    <a href="control"><button class="menuButton"><span class="material-symbols-outlined">developer_board</span></button></a>
 
     <a href="#"><button class="logoutButton"><span class="material-symbols-outlined">logout</span></button></a>
 </div>
 
-<h2>Edit Topics</h2>
+<div id="div-page-mask" style="display: none;"></div>
+
+<h2>Edit Keyword Lists</h2>
 
 <!-- <form action="/submit_company_info" method="post">
 
@@ -42,6 +45,21 @@
         <input type="submit" value="Submit">
     </form><br> -->
 
+<select>
+    {% for kind in kinds %}
+        <option value="{{  kind  }}">{{  kind  }}</option>
+    {% endfor %}
+</select>
+
+<button onclick="showNewListDialog()">New list</button><br>
+
+<dialog id="dialogNewList" open style="display: none;">
+    <button onclick="hideNewListDialog()">X</button>
+    <label>Name New List</label>
+    <input type="text">
+    <button>Create</button>
+</dialog>
+
 <button type="button" onclick="refreshDataPlot()">Revert</button>
 <button type="button" onclick="">Save</button>
 
@@ -50,8 +68,23 @@
 </iframe>
 
 <script>
+    function maskPage() {
+      document.getElementById("div-page-mask").style.display = "block"
+    }
+    function unmaskPage() {
+      document.getElementById("div-page-mask").style.display = "none"
+    }
+
     function refreshDataPlot() {
         document.getElementById('data_plot').contentDocument.location.reload(true);
+    }
+    function showNewListDialog(){
+        maskPage()
+        document.getElementById('dialogNewList').style.display = "block"
+    }
+    function hideNewListDialog(){
+        unmaskPage()
+        document.getElementById('dialogNewList').style.display = "none"
     }
 </script>
 
