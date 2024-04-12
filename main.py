@@ -9,7 +9,6 @@ from dataplots.table import data_table
 """DASH IMPORTS BEGINING"""
 from dash import dash, html
 from dataplots.company_data_table import company_data_table
-from dataplots.keyword_data_table import keyword_data_table
 """DASH IMPORTS ENDING"""
 
 from settings import bucketUPLOAD, computeZONE, computeINSTANCETEMPLATEURL, computePROJECTID, computeSTARTUPSCRIPT, datastoreNAMESPACEKEYWORDS
@@ -188,11 +187,6 @@ company_data_table(dashapp_company)
 
 dashapp_company.init_app(app=app)
 
-dashapp_topic = dash.Dash(server=False, routes_pathname_prefix="/dataplots/topic_data_table/")
-
-keyword_data_table(dashapp_topic)
-
-dashapp_topic.init_app(app=app)
 """DASH ENDING"""
 
 if __name__ == '__main__':

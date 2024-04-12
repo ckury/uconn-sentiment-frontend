@@ -60,12 +60,8 @@
     <button>Create</button>
 </dialog>
 
-<button type="button" onclick="refreshDataPlot()">Revert</button>
+<button type="button" onclick="">Revert</button>
 <button type="button" onclick="">Save</button>
-
-<iframe id="data_plot" title="Data Plot" style="border:none;" width="100%" height="800"
-    src="/dataplots/topic_data_table/">
-</iframe>
 
 <script>
     function maskPage() {
@@ -75,9 +71,6 @@
       document.getElementById("div-page-mask").style.display = "none"
     }
 
-    function refreshDataPlot() {
-        document.getElementById('data_plot').contentDocument.location.reload(true);
-    }
     function showNewListDialog(){
         maskPage()
         document.getElementById('dialogNewList').style.display = "block"
