@@ -6,11 +6,6 @@ from dataplots.graphing_category import data_plot_category
 from dataplots.graphing_summary import data_plot_summary
 from dataplots.table import data_table
 
-"""DASH IMPORTS BEGINING"""
-from dash import dash, html
-from dataplots.company_data_table import company_data_table
-"""DASH IMPORTS ENDING"""
-
 from settings import bucketUPLOAD, computeZONE, computeINSTANCETEMPLATEURL, computePROJECTID, computeSTARTUPSCRIPT, datastoreNAMESPACEKEYWORDS
 from utils.utilities import get_kinds
 
@@ -226,16 +221,6 @@ def save_list():
         
             except:
                 return
-
-
-"""DASH BEGINNING"""
-dashapp_company = dash.Dash(server=False, routes_pathname_prefix="/dataplots/company_data_table/")
-
-company_data_table(dashapp_company)
-
-dashapp_company.init_app(app=app)
-
-"""DASH ENDING"""
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
