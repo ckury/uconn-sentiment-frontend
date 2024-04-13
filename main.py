@@ -195,6 +195,38 @@ def get_keywords():
 
     return output
 
+@app.route('/save_list', methods=['POST'])
+def save_list():
+    if request.method == "POST":
+        json = request.get_json()
+
+        keyword_list = json.get('list')
+        data = json.get('data')
+
+        for row in data:
+
+            #TODO: Change logic to allow for row deletion
+            
+            query = datastoreClient.query(kind=keyword_list, namespace=datastoreNAMESPACEKEYWORDS)
+            query.add_filter('Keyword', '=', row[0])
+            results = list(query.fetch(limit=1))
+
+            if results:
+                entity = results[0] 
+
+            else:
+                entity = datastoreClient.entity(datastoreClient.key(keyword_list, namespace=datastoreNAMESPACEKEYWORDS))
+
+            data = {"Keyword": row[0], "Category": row[1]}
+            
+            entity.update(data)
+
+            try:
+                datastoreClient.put(entity=entity)
+        
+            except:
+                return
+
 
 """DASH BEGINNING"""
 dashapp_company = dash.Dash(server=False, routes_pathname_prefix="/dataplots/company_data_table/")

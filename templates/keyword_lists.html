@@ -64,8 +64,8 @@
 <dialog id="dialogNewList" open style="display: none;">
     <button onclick="hideNewListDialog()" >X</button>
     <label>Type Name of New List</label>
-    <input type="text">
-    <button>Create</button>
+    <input id="newlisttext" type="text">
+    <button onclick="newList()">Create</button>
 </dialog>
 
 <dialog id="dialogDeleteList" open style="display: none;">
@@ -92,7 +92,7 @@
     <br>
     <button type="button" onclick="addRow()" class="submitButton"><span class="material-symbols-outlined">add</span></button>
     <button type="button" onclick="getList(document.getElementById('listSelector'))" class="submitButton"><span class="material-symbols-outlined">restart_alt</span></button>
-    <button type="button" onclick="" class="submitButton"><span class="material-symbols-outlined">save</span></button>
+    <button type="button" onclick="saveList(document.getElementById('listSelector').value)" class="submitButton"><span class="material-symbols-outlined">save</span></button>
 </div>
 
 <script>
@@ -122,8 +122,14 @@
 
     function addRow(col1 = "", col2 = "") {
         var new_row = document.getElementById('table-keyword-table').getElementsByTagName('tbody')[0].insertRow()
-        new_row.insertCell(0).innerHTML = col1
-        new_row.insertCell(1).innerHTML = col2
+        var cell1 = new_row.insertCell(0)
+        cell1.innerHTML = col1
+        cell1.contentEditable = true;
+
+        var cell2 = new_row.insertCell(1)
+        cell2.innerHTML = col2
+        cell2.contentEditable = true;
+
         new_row.insertCell(2).innerHTML = '<button class="logoutButton" style="top: 0; margin: 2px;" onclick="deleteRow(this)"><span class="material-symbols-outlined" onclick="">close</span></button>'
     }
     function deleteRow(r) {
@@ -134,11 +140,7 @@
     function getList(r) {
         value = r.value
 
-        table = document.getElementById('table-keyword-table')
-
-        for(var i = 1;i<table.rows.length;){
-            table.deleteRow(i);
-        }
+        clearTable()
 
         if (value == "") {
             return
@@ -162,6 +164,64 @@
         .catch(error => {
             console.error("Error fetching data:", error);
         });
+    }
+
+    function clearTable() {
+        table = document.getElementById('table-keyword-table')
+
+        for(var i = 1;i<table.rows.length;){
+            table.deleteRow(i);
+        }
+    }
+
+    function newList(){
+        hideNewListDialog()
+
+        listName = document.getElementById('newlisttext').value
+
+        clearTable()
+        addRow()
+
+        newOption = document.createElement("option")
+        newOption.text = listName
+        newOption.value = listName
+        newOption.selected = true
+
+        document.getElementById('listSelector').add(newOption)
+    }
+
+    function saveList(listName){
+        tabledata = allTableData()
+
+        fetch("/save_list", {
+        method: "post",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          list: listName,
+          data: tabledata,
+        })
+      })
+    }
+
+    function allTableData(){
+        table = document.getElementById('table-keyword-table')
+
+        output = []
+
+        for (let i = 1; i < table.rows.length; i++){
+            row = table.rows[i]
+
+            rowdata = []
+
+            for (let j = 0; j < (row.cells.length - 1); j++) {
+                celldata = row.cells[j].textContent.trim()
+                rowdata.push(celldata)
+            }
+            output.push(rowdata)
+        }
+        return output
     }
 </script>
 
