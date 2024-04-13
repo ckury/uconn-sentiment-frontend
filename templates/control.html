@@ -60,7 +60,7 @@
         <option value="{{  kind  }}">{{ kind }}</option>
         {% endfor %}
       </select><br>
-      
+
       <label for="generic">Include Generic Keyword List: </label>
       <input type="checkbox" name="generic" id="generic" checked>
 
@@ -99,6 +99,9 @@
       yahooTicker = document.getElementById("yahooTickerBox").value
       inputFile = document.getElementById("inputFileBox").value
       keywordList = document.getElementById("keywordListBox").value
+      if (document.getElementById('generic').checked == true) {
+        keywordList = keywordList + ',generic'
+      }
 
       fetch("/create_task", {
         method: "post",

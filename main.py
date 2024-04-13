@@ -32,7 +32,7 @@ def control():
         kinds.remove('Generic')
     except ValueError:
         True
-        
+
     return render_template('control.html', kinds=kinds)
 
 @app.route('/view_data')
@@ -142,7 +142,7 @@ def create_task():
         operation = requestCompute.result()
 
         # Create and Start VM
-        return str(entityId) + str(operation)
+        return "Success:" + str(entityId), "201"
 
 @app.route('/get_keywords', methods=['GET'])
 def get_keywords():
@@ -189,7 +189,9 @@ def save_list():
                 datastoreClient.put(entity=entity)
         
             except:
-                return
+                return 
+            
+        return "Success", 201
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
