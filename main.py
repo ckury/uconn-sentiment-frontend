@@ -181,7 +181,7 @@ def save_list():
             else:
                 entity = datastoreClient.entity(datastoreClient.key(keyword_list, namespace=datastoreNAMESPACEKEYWORDS))
 
-            data = {"Keyword": row[0], "Category": row[1]}
+            data = {"Keyword": row[0], "Category": row[1], "Weight": row[2]}
             
             entity.update(data)
 

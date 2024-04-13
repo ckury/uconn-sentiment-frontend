@@ -84,5 +84,10 @@ def get_kinds(client: datastore.Client, namespace: str=None) -> list:
     query = client.query(kind='__kind__', namespace=namespace)
     query.keys_only()
 
-    output = [entity.key.id_or_name for entity in query.fetch()]
+    output = []
+
+    for entity in query.fetch():
+        if not entity.key.id_or_name[0] == "_":
+            output.append(entity.key.id_or_name)
+            
     return output
