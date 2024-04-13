@@ -27,7 +27,13 @@ def login():
 
 @app.route('/control')
 def control():
-    return render_template('control.html')
+    kinds = get_kinds(datastoreClient, datastoreNAMESPACEKEYWORDS)
+    try:
+        kinds.remove('Generic')
+    except ValueError:
+        True
+        
+    return render_template('control.html', kinds=kinds)
 
 @app.route('/view_data')
 def view_data():

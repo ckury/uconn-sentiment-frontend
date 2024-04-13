@@ -53,9 +53,16 @@
       <input type="text" id="yahooTickerBox">
       <button>...</button><br><br>
 
-      <label>Keyword List</label>
-      <input type="text" id="keywordListBox">
-      <button>...</button><br><br>
+      <label>Keyword List:</label>
+      <select id="keywordListBox">
+        <option value="" selected>None</option>
+        {% for kind in kinds %}
+        <option value="{{  kind  }}">{{ kind }}</option>
+        {% endfor %}
+      </select><br>
+      
+      <label for="generic">Include Generic Keyword List: </label>
+      <input type="checkbox" name="generic" id="generic" checked>
 
       <h3>Step 3. Confirm and Output</h3>
       <label>Kind output:</label>
