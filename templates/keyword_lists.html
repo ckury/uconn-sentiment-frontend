@@ -10,224 +10,221 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 
-<div class="menuBar">
-    <h1 class="topText">UConn Sentiment Data Manager</h1>
+<body>
+    <div class="menuBar">
+        <h1 class="topText">UConn Sentiment Data Manager</h1>
+        <hr>
+    </div>
 
-    <!-- Menu Buttons -->
+    <div class="sideNav">
+        <a href="company_info"><button class="menuButton"><span
+                    class="material-symbols-outlined">add_business</span></button></a>
+        <button class="menuButton" type="button" disabled><span
+                class="material-symbols-outlined">fact_check</span></button>
+        <a href="view_data"><button class="menuButton"><span
+                    class="material-symbols-outlined">query_stats</span></button></a>
+        <a href="control"><button class="menuButton"><span
+                    class="material-symbols-outlined">developer_board</span></button></a>
 
-    <hr>
-</div>
+        <a href="#"><button class="logoutButton"><span class="material-symbols-outlined">logout</span></button></a>
+    </div>
 
-<div class="sideNav">
-    <a href="company_info"><button class="menuButton"><span
-                class="material-symbols-outlined">add_business</span></button></a>
-    <button class="menuButton" type="button" disabled><span class="material-symbols-outlined">fact_check</span></button>
-    <a href="view_data"><button class="menuButton"><span
-                class="material-symbols-outlined">query_stats</span></button></a>
-    <a href="control"><button class="menuButton"><span
-                class="material-symbols-outlined">developer_board</span></button></a>
+    <div id="div-page-mask" style="display: none;"></div>
 
-    <a href="#"><button class="logoutButton"><span class="material-symbols-outlined">logout</span></button></a>
-</div>
+    <div id="div-main-content">
+        <h2>Edit Keyword Lists</h2>
 
-<div id="div-page-mask" style="display: none;"></div>
+        <p>Conference calls are scored against a list of keywords. Multiple keyword lists can be created but only a
+            single one (and generic) can be selected. Select a list from the dropdown and the data can be edited in the
+            below table</p>
+        <div id="div-select-list">
+            <h3>Select list:</h3>
+            <select id='listSelector' onchange="getList(this)">
+                <option value="" disabled selected>Select List</option>
+                {% for kind in kinds %}
+                <option value="{{  kind  }}">{{ kind }}</option>
+                {% endfor %}
+            </select>
 
-<h2>Edit Keyword Lists</h2>
+            <button onclick="showDeleteListDialog()">Delete list</button>
+            <button onclick="showNewListDialog()">New list</button>
+        </div>
+        <dialog id="dialogNewList" open style="display: none;">
+            <button onclick="hideNewListDialog()">X</button>
+            <label>Type Name of New List</label>
+            <input id="newlisttext" type="text">
+            <button onclick="newList()">Create</button>
+        </dialog>
 
-<p>Conference calls are scored against a list of keywords. Multiple keyword lists can be created but only a single one (and generic) can be selected. Select a list from the dropdown and the data can be edited in the below table</p>
+        <dialog id="dialogDeleteList" open style="display: none;">
+            <button onclick="hideDeleteListDialog()">X</button>
+            <label>Type Name of List to Delete</label>
+            <input type="text">
+            <button>Delete</button>
+        </dialog>
 
-<!-- <form action="/submit_company_info" method="post">
+        <h3>View/Edit Data:</h3>
 
-        <label for="Sector">Sector:</label>
-        <input type="text" id="sector" name="sector"><br><br>
-    
-
-        <label for="classification">Classification:</label>
-        <input type="text" id="classification" name="industry"><br><br>
-
-        <label for="keyword">Keyword:</label>
-        <input type="text" id="keyword" name="long_name"><br><br>
-
-        <input type="submit" value="Submit">
-    </form><br> -->
-<h3>Select list:</h3>
-<select id='listSelector' onchange="getList(this)">
-    <option value="" disabled selected>Select List</option>
-    {% for kind in kinds %}
-    <option value="{{  kind  }}">{{ kind }}</option>
-    {% endfor %}
-</select>
-
-<button onclick="showDeleteListDialog()">Delete list</button>
-<button onclick="showNewListDialog()">New list</button>
-
-<dialog id="dialogNewList" open style="display: none;">
-    <button onclick="hideNewListDialog()" >X</button>
-    <label>Type Name of New List</label>
-    <input id="newlisttext" type="text">
-    <button onclick="newList()">Create</button>
-</dialog>
-
-<dialog id="dialogDeleteList" open style="display: none;">
-    <button onclick="hideDeleteListDialog()" >X</button>
-    <label>Type Name of List to Delete</label>
-    <input type="text">
-    <button>Delete</button>
-</dialog>
-
-<h3>View/Edit Data:</h3>
-
-<div id="div-keyword-table" class="editable-table">
-    <table id="table-keyword-table">
-        <thead>
-            <tr>
-                <th scope="col">Keyword</th>
-                <th scope="col">Category</th>
-                <th scope="col">Weight</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <br>
-    <button type="button" onclick="addRow()" class="submitButton"><span class="material-symbols-outlined">add</span></button>
-    <button type="button" onclick="getList(document.getElementById('listSelector'))" class="submitButton"><span class="material-symbols-outlined">restart_alt</span></button>
-    <button type="button" onclick="saveList(document.getElementById('listSelector').value)" class="submitButton"><span class="material-symbols-outlined">save</span></button>
-</div>
-
-<script>
-    function maskPage() {
-        document.getElementById("div-page-mask").style.display = "block"
-    }
-    function unmaskPage() {
-        document.getElementById("div-page-mask").style.display = "none"
-    }
-
-    function showNewListDialog() {
-        maskPage()
-        document.getElementById('dialogNewList').style.display = "block"
-    }
-    function hideNewListDialog() {
-        unmaskPage()
-        document.getElementById('dialogNewList').style.display = "none"
-    }
-    function showDeleteListDialog() {
-        maskPage()
-        document.getElementById('dialogDeleteList').style.display = "block"
-    }
-    function hideDeleteListDialog() {
-        unmaskPage()
-        document.getElementById('dialogDeleteList').style.display = "none"
-    }
-
-    function addRow(col1 = "", col2 = "", col3 = "") {
-        var new_row = document.getElementById('table-keyword-table').getElementsByTagName('tbody')[0].insertRow()
-        var cell1 = new_row.insertCell(0)
-        cell1.innerHTML = col1
-        cell1.contentEditable = true;
-
-        var cell2 = new_row.insertCell(1)
-        cell2.innerHTML = col2
-        cell2.contentEditable = true;
-
-        var cell3 = new_row.insertCell(2)
-        cell3.innerHTML = col3
-        cell3.contentEditable = true;
-
-        new_row.insertCell(3).innerHTML = '<button class="logoutButton" style="top: 0; margin: 2px;" onclick="deleteRow(this)"><span class="material-symbols-outlined" onclick="">close</span></button>'
-    }
-    function deleteRow(r) {
-        var i = r.parentNode.parentNode.rowIndex;
-        document.getElementById("table-keyword-table").deleteRow(i);
-    }
-
-    function getList(r) {
-        value = r.value
-
-        clearTable()
-
-        if (value == "") {
-            return
+        <div id="div-keyword-table" class="editable-table">
+            <table id="table-keyword-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Keyword</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Weight</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <br>
+            <button type="button" onclick="addRow()" class="submitButton"><span
+                    class="material-symbols-outlined">add</span></button>
+            <button type="button" onclick="getList(document.getElementById('listSelector'))" class="submitButton"><span
+                    class="material-symbols-outlined">restart_alt</span></button>
+            <button type="button" onclick="saveList(document.getElementById('listSelector').value)"
+                class="submitButton"><span class="material-symbols-outlined">save</span></button>
+        </div>
+    </div>
+    <script>
+        function maskPage() {
+            document.getElementById("div-page-mask").style.display = "block"
         }
 
-        fetch("/get_keywords?" + new URLSearchParams({list: value}), {
-            method: "GET",
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`)
-            }
-            return response.json()
-        })
-        .then(data => {
-            for (let i = 0; i < data.length; i++){
-                row = data[i]
-                addRow(row[0], row[1], row[2])
-            }
-        })
-        .catch(error => {
-            console.error("Error fetching data:", error);
-        });
-    }
-
-    function clearTable() {
-        table = document.getElementById('table-keyword-table')
-
-        for(var i = 1;i<table.rows.length;){
-            table.deleteRow(i);
+        function unmaskPage() {
+            document.getElementById("div-page-mask").style.display = "none"
         }
-    }
 
-    function newList(){
-        hideNewListDialog()
-
-        listName = document.getElementById('newlisttext').value
-
-        clearTable()
-        addRow()
-
-        newOption = document.createElement("option")
-        newOption.text = listName
-        newOption.value = listName
-        newOption.selected = true
-
-        document.getElementById('listSelector').add(newOption)
-    }
-
-    function saveList(listName){
-        tabledata = allTableData()
-
-        fetch("/save_list", {
-        method: "post",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          list: listName,
-          data: tabledata,
-        })
-      })
-    }
-
-    function allTableData(){
-        table = document.getElementById('table-keyword-table')
-
-        output = []
-
-        for (let i = 1; i < table.rows.length; i++){
-            row = table.rows[i]
-
-            rowdata = []
-
-            for (let j = 0; j < (row.cells.length - 1); j++) {
-                celldata = row.cells[j].textContent.trim()
-                rowdata.push(celldata)
-            }
-            output.push(rowdata)
+        function showNewListDialog() {
+            maskPage()
+            document.getElementById('dialogNewList').style.display = "block"
         }
-        return output
-    }
-</script>
+
+        function hideNewListDialog() {
+            unmaskPage()
+            document.getElementById('dialogNewList').style.display = "none"
+        }
+
+        function showDeleteListDialog() {
+            maskPage()
+            document.getElementById('dialogDeleteList').style.display = "block"
+        }
+
+        function hideDeleteListDialog() {
+            unmaskPage()
+            document.getElementById('dialogDeleteList').style.display = "none"
+        }
+
+        function addRow(col1 = "", col2 = "", col3 = "") {
+            var new_row = document.getElementById('table-keyword-table').getElementsByTagName('tbody')[0].insertRow()
+            var cell1 = new_row.insertCell(0)
+            cell1.innerHTML = col1
+            cell1.contentEditable = true;
+
+            var cell2 = new_row.insertCell(1)
+            cell2.innerHTML = col2
+            cell2.contentEditable = true;
+
+            var cell3 = new_row.insertCell(2)
+            cell3.innerHTML = col3
+            cell3.contentEditable = true;
+
+            new_row.insertCell(3).innerHTML = '<button class="logoutButton" style="top: 0; margin: 2px;" onclick="deleteRow(this)"><span class="material-symbols-outlined" onclick="">close</span></button>'
+        }
+
+        function deleteRow(r) {
+            var i = r.parentNode.parentNode.rowIndex;
+            document.getElementById("table-keyword-table").deleteRow(i);
+        }
+
+        function getList(r) {
+            value = r.value
+
+            clearTable()
+
+            if (value == "") {
+                return
+            }
+
+            fetch("/get_keywords?" + new URLSearchParams({ list: value }), {
+                method: "GET",
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`)
+                    }
+                    return response.json()
+                })
+                .then(data => {
+                    for (let i = 0; i < data.length; i++) {
+                        row = data[i]
+                        addRow(row[0], row[1], row[2])
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                });
+        }
+
+        function clearTable() {
+            table = document.getElementById('table-keyword-table')
+
+            for (var i = 1; i < table.rows.length;) {
+                table.deleteRow(i);
+            }
+        }
+
+        function newList() {
+            hideNewListDialog()
+
+            listName = document.getElementById('newlisttext').value
+
+            clearTable()
+            addRow()
+
+            newOption = document.createElement("option")
+            newOption.text = listName
+            newOption.value = listName
+            newOption.selected = true
+
+            document.getElementById('listSelector').add(newOption)
+        }
+
+        function saveList(listName) {
+            tabledata = allTableData()
+
+            fetch("/save_list", {
+                method: "post",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    list: listName,
+                    data: tabledata,
+                })
+            })
+        }
+
+        function allTableData() {
+            table = document.getElementById('table-keyword-table')
+
+            output = []
+
+            for (let i = 1; i < table.rows.length; i++) {
+                row = table.rows[i]
+
+                rowdata = []
+
+                for (let j = 0; j < (row.cells.length - 1); j++) {
+                    celldata = row.cells[j].textContent.trim()
+                    rowdata.push(celldata)
+                }
+                output.push(rowdata)
+            }
+            return output
+        }
+    </script>
+</body>
 
 </html>
