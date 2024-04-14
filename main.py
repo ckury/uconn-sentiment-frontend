@@ -37,7 +37,13 @@ def control():
 
 @app.route('/view_data')
 def view_data():
-    return render_template('view_data.html')
+    kinds = get_kinds(datastoreClient, datastoreNAMESPACEKEYWORDS)
+    try:
+        kinds.remove('Generic')
+    except ValueError:
+        True
+
+    return render_template('view_data.html', kinds=kinds)
 
 @app.route('/info_drill', methods=['GET', 'POST'])
 def info_drill():

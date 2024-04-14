@@ -6,22 +6,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>UConn Sentiment Data Manager</title>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 
 <body>
 
   <div class="menuBar">
     <h1 class="topText">UConn Sentiment Data Manager</h1>
-  
+
     <hr>
   </div>
 
   <div class="sideNav" id="sideNav">
-    <a href="company_info"><button class="menuButton"><span class="material-symbols-outlined">add_business</span></button></a>
-    <a href="keyword_lists"><button class="menuButton"><span class="material-symbols-outlined">fact_check</span></button></a>
-    <button class="menuButton" type="button" disabled><span class="material-symbols-outlined">query_stats</span></button>
-    <a href="control"><button class="menuButton"><span class="material-symbols-outlined">developer_board</span></button></a>
+    <a href="company_info"><button class="menuButton"><span
+          class="material-symbols-outlined">add_business</span></button></a>
+    <a href="keyword_lists"><button class="menuButton"><span
+          class="material-symbols-outlined">fact_check</span></button></a>
+    <button class="menuButton" type="button" disabled><span
+        class="material-symbols-outlined">query_stats</span></button>
+    <a href="control"><button class="menuButton"><span
+          class="material-symbols-outlined">developer_board</span></button></a>
 
     <a href="#"><button class="logoutButton"><span class="material-symbols-outlined">logout</span></button></a>
   </div>
@@ -33,13 +38,23 @@
 
   <label for="view_sector">By Sector:</label>
   <input type="text" id="sector" name="Ticker"><br><br>
+  
+  <label>Keyword List:</label>
+  <select id="keywordListBox">
+    <option value="" selected>None</option>
+    {% for kind in kinds %}
+    <option value="{{  kind  }}">{{ kind }}</option>
+    {% endfor %}
+  </select>
+  <label for="generic">Include Generic Keyword List: </label>
+  <input type="checkbox" name="generic" id="generic" checked><br><br>
 
   <label>Data Type:</label>
   <select name="weightedSelector" id="weightedSelector">
     <option value="Unweighted">Unweighted</option>
     <option value="Weighted">Weighted</option>
   </select>
-  
+
   <select name="graphType" id="graphType">
     <option value="icat">Category Data</option>
     <option value="sum">Summary Data</option>
@@ -60,7 +75,7 @@
     <option value="2023">2023</option>
     <option value="2024">2024</option>
   </select>
-  
+
   <label>To</label>
   <select name="endQuarter" id="endQuarter">
     <option value="Q1">Q1</option>
@@ -78,7 +93,8 @@
   </select><br><br>
 
   <input class="submitButton" id="viewPlot" type="button" value="View Plot" onclick="viewPlot()">
-  <input class="submitButton" id="viewTable" type="button" value="View Table" onclick="viewTable()" style="display: none;"><br><br>
+  <input class="submitButton" id="viewTable" type="button" value="View Table" onclick="viewTable()"
+    style="display: none;"><br><br>
 
   <div class="loader" id="loader" style="display: none;"></div>
 
@@ -114,11 +130,11 @@
         sectorText.replace(/%20/g, " ")
       }
 
-      if (weightedSelect == "Unweighted"){
+      if (weightedSelect == "Unweighted") {
         weighted = "False"
       }
 
-      if (weightedSelect == "Weighted"){
+      if (weightedSelect == "Weighted") {
         weighted = "True"
       }
 
