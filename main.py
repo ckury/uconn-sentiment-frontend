@@ -129,9 +129,9 @@ def upload_file():
         f.filename = ""
 
         if filetype == "CC":
-            f.filename += "Raw_CC/RAWCC-"
+            f.filename += "Raw_CC/"
         
-        f.filename += ticker.replace(" ", "_") + "-"
+        f.filename += ticker.replace(" ", "_") + "/"
 
         f.filename += date.replace("-", "_")
 
