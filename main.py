@@ -6,7 +6,7 @@ from dataplots.graphing_category import data_plot_category
 from dataplots.graphing_summary import data_plot_summary
 from dataplots.table import data_table
 
-from settings import bucketUPLOAD, computeZONE, computeINSTANCETEMPLATEURL, computePROJECTID, computeSTARTUPSCRIPT, datastoreNAMESPACEKEYWORDS
+from settings import bucketUPLOAD, computeZONE, computeINSTANCETEMPLATEURL, computePROJECTID, computeSTARTUPSCRIPT, datastoreNAMESPACEKEYWORDS, kindCOMPANYINFO
 from utils.utilities import get_kinds
 
 
@@ -218,7 +218,7 @@ def save_company_list():
 
             #TODO: Change logic to allow for row deletion
             
-            query = datastoreClient.query(kind='Company_Info')
+            query = datastoreClient.query(kind=kindCOMPANYINFO)
             query.add_filter('Yahoo_Ticker', '=', row[0])
             results = list(query.fetch(limit=1))
 
@@ -226,7 +226,7 @@ def save_company_list():
                 entity = results[0] 
 
             else:
-                entity = datastoreClient.entity(datastoreClient.key(kind='Company_Info'))
+                entity = datastoreClient.entity(datastoreClient.key(kind=kindCOMPANYINFO))
 
             data = {"Yahoo_Ticker": row[0], "Full_Name": row[1], "Sector": row[2]}
             
