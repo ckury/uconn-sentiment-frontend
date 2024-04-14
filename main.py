@@ -149,7 +149,7 @@ def create_task():
         json = request.get_json()
 
         yahooTicker = json.get('yahooTicker')
-        inputFile = json.get('inputFile')
+        inputFile = json.get('inputFile').replace(" ", "_")
         keywordList = json.get('keywordList')
 
         data = {"Yahoo_Ticker": yahooTicker, "Input_File": inputFile, "Keyword_List": keywordList, "Status": "Waiting", "Status_Message": "Waiting for VM to claim task and start processing"}
