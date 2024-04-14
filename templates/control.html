@@ -103,7 +103,7 @@
       inputFile = document.getElementById("inputFileBox").value
       keywordList = document.getElementById("keywordListBox").value
       if (document.getElementById('generic').checked == true) {
-        keywordList = keywordList + ',generic'
+        keywordList = keywordList + ',Generic'
       }
 
       fetch("/create_task", {
