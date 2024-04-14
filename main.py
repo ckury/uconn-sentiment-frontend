@@ -155,7 +155,7 @@ def get_keywords():
     output = []
 
     for e in query.fetch():
-        output.append((e["Keyword"], e["Category"]))
+        output.append((e["Keyword"], e["Category"], e["Weight"]))
 
     return output
 
@@ -182,6 +182,53 @@ def save_list():
                 entity = datastoreClient.entity(datastoreClient.key(keyword_list, namespace=datastoreNAMESPACEKEYWORDS))
 
             data = {"Keyword": row[0], "Category": row[1], "Weight": row[2]}
+            
+            entity.update(data)
+
+            try:
+                datastoreClient.put(entity=entity)
+        
+            except:
+                return 
+            
+        return "Success", 201
+    
+@app.route('/get_companies', methods=['GET'])
+def get_companies():
+
+    query = datastoreClient.query(kind='Company_Info')
+
+    query.order = ['Yahoo_Ticker']
+
+    output = []
+
+    for e in query.fetch():
+        output.append((e["Yahoo_Ticker"], e["Full_Name"], e["Sector"]))
+
+    return output
+
+@app.route('/save_company_list', methods=['POST'])
+def save_company_list():
+    if request.method == "POST":
+        json = request.get_json()
+
+        data = json.get('data')
+
+        for row in data:
+
+            #TODO: Change logic to allow for row deletion
+            
+            query = datastoreClient.query(kind='Company_Info')
+            query.add_filter('Yahoo_Ticker', '=', row[0])
+            results = list(query.fetch(limit=1))
+
+            if results:
+                entity = results[0] 
+
+            else:
+                entity = datastoreClient.entity(datastoreClient.key(kind='Company_Info'))
+
+            data = {"Yahoo_Ticker": row[0], "Full_Name": row[1], "Sector": row[2]}
             
             entity.update(data)
 

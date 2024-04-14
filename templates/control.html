@@ -70,10 +70,13 @@
 
       <button class="submitButton" onclick="submitTask()">Submit for Processing</button>
 
-      <a id="success" style="color: rgb(0, 198, 53);"><span class="material-symbols-outlined">done</span> Create Task
-        Success</a>
+      
       <a id="failed" style="color: hsl(0, 100%, 39%);"><span class="material-symbols-outlined">close</span> Create Task
         Failed:</a>
+
+      <dialog open id="dialog-upload_file" style="display: none;">
+        <a id="success" style="color: rgb(0, 198, 53);"><span class="material-symbols-outlined">done</span> Create Task Success</a>
+      </dialog>
 
     </div>
   </div>
