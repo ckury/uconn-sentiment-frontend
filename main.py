@@ -33,7 +33,9 @@ def control():
     except ValueError:
         True
 
-    return render_template('control.html', kinds=kinds)
+    tickers = get_tickers(datastoreClient)
+
+    return render_template('control.html', kinds=kinds, tickers=tickers)
 
 @app.route('/view_data')
 def view_data():
