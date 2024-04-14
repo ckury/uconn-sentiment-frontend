@@ -91,3 +91,14 @@ def get_kinds(client: datastore.Client, namespace: str=None) -> list:
             output.append(entity.key.id_or_name)
             
     return output
+
+def get_tickers(client: datastore.Client) -> list:
+    query = client.query(kind='Company_Info')
+    query.order = ["Yahoo_Ticker"]
+    
+    output = []
+    
+    for entity in query.fetch():
+        output.append(entity["Yahoo_Ticker"])
+
+    return output

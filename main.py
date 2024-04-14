@@ -7,7 +7,7 @@ from dataplots.graphing_summary import data_plot_summary
 from dataplots.table import data_table
 
 from settings import bucketUPLOAD, computeZONE, computeINSTANCETEMPLATEURL, computePROJECTID, computeSTARTUPSCRIPT, datastoreNAMESPACEKEYWORDS, kindCOMPANYINFO
-from utils.utilities import get_kinds
+from utils.utilities import get_kinds, get_tickers
 
 
 app = Flask(__name__)
@@ -65,7 +65,9 @@ def info_drill():
 
 @app.route('/upload_prompt')
 def upload_prompt():
-    return render_template('upload_prompt.html')
+    tickers = get_tickers(datastoreClient)
+    
+    return render_template('upload_prompt.html', tickers=tickers)
 
 @app.route('/company_info')
 def company_info():
