@@ -18,7 +18,9 @@
 <body>
     <button onclick="parent.hideUploadDialog()">X</button>
     <label style="font-weight: bold;">Upload File</label><hr>
+    
     <form action="/upload_file" method="post" enctype="multipart/form-data">
+
         <label for="filetype">File Type:</label>
         <select name="filetype" id="filetype" value:>
             <option value="CC">Conference Call Transcript</option>
@@ -32,8 +34,10 @@
         </select>
         
         <label for="date">Date:</label>
-        <input type="date"><br><br>
+        <input type="date" id="date" name="date"><br><br>
+
         <input type="file" id="file_upload" name="file_upload"><br><br>
+
         <input id="submit" type="submit" value="Upload" disabled>
         <label>Max size: 2MB</label>
     </form>

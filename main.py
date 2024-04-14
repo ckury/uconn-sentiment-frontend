@@ -66,7 +66,7 @@ def info_drill():
 @app.route('/upload_prompt')
 def upload_prompt():
     tickers = get_tickers(datastoreClient)
-    
+
     return render_template('upload_prompt.html', tickers=tickers)
 
 @app.route('/company_info')
@@ -119,10 +119,24 @@ def table():
 @app.route('/upload_file', methods=['POST'])
 def upload_file():
     if request.method == 'POST':
+        filetype = request.form['filetype']
+        ticker = request.form['ticker']
+        date = request.form['date']
         f = request.files['file_upload']
 
+        f.filename = ""
+
+        if filetype == "CC":
+            f.filename += "Raw_CC/RAWCC-"
+        
+        f.filename += ticker.replace(" ", "_") + "-"
+
+        f.filename += date.replace("-", "_")
+
+        f.filename += ".html"
+
         bucket = storageClient.get_bucket(bucketUPLOAD)
-        blob = bucket.blob("Raw_CC/" + f.filename)
+        blob = bucket.blob(f.filename)
 
         blob.upload_from_file(f)
     return render_template('upload_success.html')
