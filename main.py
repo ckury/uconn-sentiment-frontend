@@ -1,4 +1,5 @@
 import os
+import datetime
 
 from flask import Flask, render_template, request, redirect
 from google.cloud import datastore, storage, compute_v1
@@ -7,7 +8,7 @@ from dataplots.graphing_summary import data_plot_summary
 from dataplots.table import data_table
 
 from settings import bucketUPLOAD, computeZONE, computeINSTANCETEMPLATEURL, computePROJECTID, computeSTARTUPSCRIPT, datastoreNAMESPACEKEYWORDS, kindCOMPANYINFO
-from utils.utilities import get_kinds
+from utils.utilities import get_kinds, get_tickers
 
 
 app = Flask(__name__)
@@ -33,11 +34,19 @@ def control():
     except ValueError:
         True
 
-    return render_template('control.html', kinds=kinds)
+    tickers = get_tickers(datastoreClient)
+
+    return render_template('control.html', kinds=kinds, tickers=tickers)
 
 @app.route('/view_data')
 def view_data():
-    return render_template('view_data.html')
+    kinds = get_kinds(datastoreClient, datastoreNAMESPACEKEYWORDS)
+    try:
+        kinds.remove('Generic')
+    except ValueError:
+        True
+
+    return render_template('view_data.html', kinds=kinds)
 
 @app.route('/info_drill', methods=['GET', 'POST'])
 def info_drill():
@@ -59,7 +68,9 @@ def info_drill():
 
 @app.route('/upload_prompt')
 def upload_prompt():
-    return render_template('upload_prompt.html')
+    tickers = get_tickers(datastoreClient)
+
+    return render_template('upload_prompt.html', tickers=tickers)
 
 @app.route('/company_info')
 def company_info():
@@ -111,10 +122,24 @@ def table():
 @app.route('/upload_file', methods=['POST'])
 def upload_file():
     if request.method == 'POST':
+        filetype = request.form['filetype']
+        ticker = request.form['ticker']
+        date = request.form['date']
         f = request.files['file_upload']
 
+        f.filename = ""
+
+        if filetype == "CC":
+            f.filename += "Raw_CC/"
+        
+        f.filename += ticker.replace(" ", "_") + "/"
+
+        f.filename += date.replace("-", "_")
+
+        f.filename += ".html"
+
         bucket = storageClient.get_bucket(bucketUPLOAD)
-        blob = bucket.blob("Raw_CC/" + f.filename)
+        blob = bucket.blob(f.filename)
 
         blob.upload_from_file(f)
     return render_template('upload_success.html')
@@ -125,10 +150,14 @@ def create_task():
         json = request.get_json()
 
         yahooTicker = json.get('yahooTicker')
-        inputFile = json.get('inputFile')
+        inputFile = json.get('inputFile').replace(" ", "_")
         keywordList = json.get('keywordList')
 
-        data = {"Yahoo_Ticker": yahooTicker, "Input_File": inputFile, "Keyword_List": keywordList, "Status": "Waiting", "Status_Message": "Waiting for VM to claim task and start processing"}
+        current_time = datetime.datetime.now()
+
+        dateandtime = str(current_time.year) + '_' + str(current_time.month) + '_' + str(current_time.day) + '-' + str(current_time.hour) + '_' + str(current_time.minute)
+
+        data = {"Yahoo_Ticker": yahooTicker, "Input_File": inputFile, "Keyword_List": keywordList, "Status": "Waiting", "Status_Message": "Waiting for VM to claim task and start processing", "DateTime": dateandtime}
 
         entity = datastoreClient.entity(datastoreClient.key("Task_List"))
 

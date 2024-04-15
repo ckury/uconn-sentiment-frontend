@@ -36,17 +36,19 @@
     <h2>Model Control</h2>
 
     <div id="div-create-task">
-      <h4>Note: Each ticker should be it's own task, but multiple conference calls can be processed at once as long as
-        they all use the same keyword list</h4>
+      <h4>Note: Each task is for a single ticker. Currently, all conference calls are processed from the ticker.</h4>
       <h3>Step 1. Input</h3>
-      <button onclick="showUploadDialog()">Upload File</button>
+      <button onclick="showUploadDialog()">Upload Conference Calls</button>
       <dialog open id="dialog-upload_file" style="display: none;">
         <iframe src="/upload_prompt" style="border: none; width: 300px; height: 200px;" scrolling="no"></iframe>
       </dialog><br><br>
 
-      <label>Select Data:</label>
-      <input type="text" id="inputFileBox">
-      <button>...</button>
+      <label>Ticker:</label>
+      <select id="inputFileBox">
+        {% for tic in tickers %}
+        <option value="{{  tic  }}">{{ tic }}</option>
+        {% endfor %}
+      </select>
 
       <h3>Step 2. Settings</h3>
 
@@ -96,7 +98,7 @@
     }
 
     function submitTask() {
-      yahooTicker = document.getElementById("yahooTickerBox").value
+      yahooTicker = document.getElementById("inputFileBox").value
       inputFile = document.getElementById("inputFileBox").value
       keywordList = document.getElementById("keywordListBox").value
       if (document.getElementById('generic').checked == true) {
