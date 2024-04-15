@@ -273,7 +273,7 @@ def save_company_list():
                 entity = results[0] 
 
             else:
-                entity = datastoreClient.entity(datastoreClient.key(kind=kindCOMPANYINFO))
+                entity = datastore.Entity(key=datastoreClient.key(kindCOMPANYINFO))
 
             data = {"Yahoo_Ticker": row[0], "Full_Name": row[1], "Sector": row[2]}
             
