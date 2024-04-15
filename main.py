@@ -39,6 +39,24 @@ def control():
 def view_data():
     return render_template('view_data.html')
 
+@app.route('/info_drill', methods=['GET', 'POST'])
+def info_drill():
+    data = None
+    if request.method == 'POST':
+        yahoo_ticker = request.form.get('yahooTicker')
+        period = request.form.get('period')
+        category = request.form.get('category')
+
+        query = datastoreClient.query(kind='Banks_New')
+        query.add_filter('YahooTicker', '=', yahoo_ticker)
+        query.add_filter('Period', '=', period)
+        query.add_filter('Category', '=', category)
+        results = list(query.fetch())
+
+        data = [dict(result) for result in results]
+    
+    return render_template('info_drill.html', data=data)
+
 @app.route('/upload_prompt')
 def upload_prompt():
     return render_template('upload_prompt.html')
