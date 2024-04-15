@@ -1,4 +1,5 @@
 import os
+import datetime
 
 from flask import Flask, render_template, request, redirect
 from google.cloud import datastore, storage, compute_v1
@@ -152,7 +153,11 @@ def create_task():
         inputFile = json.get('inputFile').replace(" ", "_")
         keywordList = json.get('keywordList')
 
-        data = {"Yahoo_Ticker": yahooTicker, "Input_File": inputFile, "Keyword_List": keywordList, "Status": "Waiting", "Status_Message": "Waiting for VM to claim task and start processing"}
+        current_time = datetime.datetime.now()
+
+        dateandtime = str(current_time.year) + '_' + str(current_time.month) + '_' + str(current_time.day) + '-' + str(current_time.hour) + '_' + str(current_time.minute)
+
+        data = {"Yahoo_Ticker": yahooTicker, "Input_File": inputFile, "Keyword_List": keywordList, "Status": "Waiting", "Status_Message": "Waiting for VM to claim task and start processing", "DateTime": dateandtime}
 
         entity = datastoreClient.entity(datastoreClient.key("Task_List"))
 
