@@ -68,10 +68,10 @@ def info_drill():
             format_result = dict(result)
 
             new_data = float(format_result['WeightedSentiment'])
-            format_result['WeightedSentiment'] = f'{new_data:.2f}'
+            format_result['WeightedSentiment'] = f'{new_data:.3f}'
 
             new_data = float(format_result['Score'])
-            format_result['Score'] = f'{new_data:.2f}'
+            format_result['Score'] = f'{new_data:.3f}'
 
             data.append(format_result)
             
