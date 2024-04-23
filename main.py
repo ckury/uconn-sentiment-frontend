@@ -62,7 +62,19 @@ def info_drill():
         query.add_filter('Category', '=', category)
         results = list(query.fetch())
 
-        data = [dict(result) for result in results]
+        data = []
+
+        for result in results:
+            format_result = dict(result)
+
+            new_data = float(format_result['WeightedSentiment'])
+            format_result['WeightedSentiment'] = f'{new_data:.2f}'
+
+            new_data = float(format_result['Score'])
+            format_result['Score'] = f'{new_data:.2f}'
+
+            data.append(format_result)
+            
     
     return render_template('info_drill.html', data=data)
 
