@@ -201,7 +201,7 @@ def create_task():
         operation = requestCompute.result()
 
         # Create and Start VM
-        return "Success:" + str(entityId), "201"
+        return "Success: Task ID = " + str(entityId), "201"
 
 @app.route('/get_keywords', methods=['GET'])
 def get_keywords():

@@ -70,12 +70,10 @@
 
       <button class="submitButton" onclick="submitTask()">Submit for Processing</button>
 
-      
-      <a id="failed" style="color: hsl(0, 100%, 39%);"><span class="material-symbols-outlined">close</span> Create Task
-        Failed:</a>
-
-      <dialog open id="dialog-upload_file" style="display: none;">
-        <a id="success" style="color: rgb(0, 198, 53);"><span class="material-symbols-outlined">done</span> Create Task Success</a>
+      <dialog open id="dialog-task_response" style="display: none;">
+        <a id="waiting" style="color: rgb(0, 102, 198);"><span class="material-symbols-outlined">pending</span> Creating Task</a><br><br>
+        <a id="response-tag"></a><br><br>
+        <button id="button-close-task_response" onclick="hideTaskDialog()" style="width: 350px;" disabled>Close</button>
       </dialog>
 
     </div>
@@ -98,7 +96,37 @@
       document.getElementById("dialog-upload_file").style.display = "none"
     }
 
+    function showTaskDialog() {
+      maskPage()
+      document.getElementById("dialog-task_response").style.display = "block"
+      document.getElementById("button-close-task_response").disabled = true
+      document.getElementById("response-tag").style.display = "none"
+      document.getElementById("waiting").style.display = "block"
+    }
+    function hideTaskDialog() {
+      unmaskPage()
+      document.getElementById("dialog-task_response").style.display = "none"
+    }
+
+    function taskSuccess(data) {
+      document.getElementById("button-close-task_response").disabled = false
+      document.getElementById("waiting").style.display = "none"
+      document.getElementById("response-tag").style.display = "block"
+      document.getElementById("response-tag").style.color = "rgb(0, 198, 53)"
+      document.getElementById("response-tag").innerHTML = '<span class="material-symbols-outlined">done</span> ' + data
+    }
+
+    function taskFailed(data) {
+      document.getElementById("button-close-task_response").disabled = false
+      document.getElementById("waiting").style.display = "none"
+      document.getElementById("response-tag").style.display = "block"
+      document.getElementById("response-tag").style.color = "hsl(0, 100%, 39%)"
+      document.getElementById("response-tag").innerHTML = '<span class="material-symbols-outlined">done</span> ' + data
+    }
+
     function submitTask() {
+      showTaskDialog()
+
       yahooTicker = document.getElementById("inputFileBox").value
       inputFile = document.getElementById("inputFileBox").value
       keywordList = document.getElementById("keywordListBox").value
@@ -116,6 +144,19 @@
           inputFile: inputFile,
           keywordList: keywordList,
         })
+      })
+      .then (response => {
+        if (response.ok) { // If response is successful HTTP status code (2xx)
+          return response.text();
+        } else {
+          throw new Error(response.text())
+        }
+      })
+      .then (text => {
+        taskSuccess(text)
+      })
+      .catch (error => {
+        taskFailed(error)
       })
     }
   </script>
