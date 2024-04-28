@@ -21,7 +21,7 @@ def data_plot_category(ticker: str | list=None,
     client = datastore.Client()
 
     # Converting string provided by URL to boolean value
-    if weighted in [True, "True"]: weighted = True; scoreColumn = "WeightedSentiment"
+    if weighted in [True, "True"]: weighted = True; scoreColumn = "Weighted Sentiment"
     if weighted in [False, "False"]: weighted = False; scoreColumn = "Score"
 
     # Cleanup tickers and sectors and put them in correct format
@@ -35,7 +35,7 @@ def data_plot_category(ticker: str | list=None,
 
     # Try to fetch the data
     try:
-        entities = fetch_ticker_data(client=client, kind="Banks_New")
+        entities = fetch_ticker_data(client=client, kind="Sentiment_Details")
 
     # If data fetch fails, return catch error and provide error code as response
     except:
