@@ -37,21 +37,24 @@
     <h2>Model Control</h2>
 
     <div id="div-create-task">
-      <h4>Note: Each task is for a single ticker. Currently, all conference calls are processed from the ticker.</h4>
-      <h3>Step 1. Input</h3>
+      <h4>Note: Each task is for a single ticker. Currently, all conference calls are processed from the selected ticker.</h4>
+      <h3>Step 1. Prepare Data</h3>
+      <a href="company_info"><button><span class="material-symbols-outlined">add_business</span></button></a>
+      <a> Create ticker entry in Company Info table if is not already present.</a><br><br>
       <button onclick="showUploadDialog()">Upload Conference Calls</button>
       <dialog open id="dialog-upload_file" style="display: none;">
         <iframe src="/upload_prompt" style="border: none; width: 300px; height: 200px;" scrolling="no"></iframe>
-      </dialog><br><br>
+      </dialog>
 
-      <label>Ticker:</label>
+
+      <h3>Step 2. Task Settings</h3>
+
+      <label>Select ticker for processing: </label>
       <select id="inputFileBox">
         {% for tic in tickers %}
         <option value="{{  tic  }}">{{ tic }}</option>
         {% endfor %}
-      </select>
-
-      <h3>Step 2. Settings</h3>
+      </select><br><br>
 
       <label>Keyword List:</label>
       <select id="keywordListBox">
@@ -59,10 +62,10 @@
         {% for kind in kinds %}
         <option value="{{  kind  }}">{{ kind }}</option>
         {% endfor %}
-      </select><br>
+      </select>
 
-      <label for="generic">Include Generic Keyword List: </label>
       <input type="checkbox" name="generic" id="generic" checked>
+      <label for="generic">Include Generic Keyword List</label>
 
       <h3>Step 3. Confirm and Output</h3>
       <label>Kind output:</label>
@@ -71,7 +74,7 @@
       <button class="submitButton" onclick="submitTask()">Submit for Processing</button>
 
       <dialog open id="dialog-task_response" style="display: none;">
-        <a id="waiting" style="color: rgb(0, 102, 198);"><span class="material-symbols-outlined">pending</span> Creating Task</a><br><br>
+        <a id="waiting" style="color: rgb(0, 102, 198);"><span class="material-symbols-outlined">pending</span> Creating Task, Please Wait...</a><br><br>
         <a id="response-tag"></a><br><br>
         <button id="button-close-task_response" onclick="hideTaskDialog()" style="width: 350px;" disabled>Close</button>
       </dialog>
