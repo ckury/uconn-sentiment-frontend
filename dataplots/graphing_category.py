@@ -31,7 +31,7 @@ def data_plot_category(ticker: str | list=None,
     tickerfilterlist = []
 
     tickerfilterlist.extend(clean_tickers)
-    tickerfilterlist.extend(tickers_from_sectors(client=client, sectors=clean_sectors))
+    tickerfilterlist.extend(tickers_from_sectors(sectors=clean_sectors))
 
     # Try to fetch the data
     try:

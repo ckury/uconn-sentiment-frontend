@@ -5,7 +5,6 @@ from google.cloud import datastore
 from dataplots.graphing_category import data_plot_category
 from dataplots.graphing_summary import data_plot_summary
 
-
 from settings import bucketUPLOAD, computeZONE, computeINSTANCETEMPLATEURL, computePROJECTID, computeSTARTUPSCRIPT, datastoreNAMESPACEKEYWORDS, kindCOMPANYINFO
 from utils.utilities import get_tickers, getDateTime
 
@@ -76,7 +75,7 @@ def info_drill():
 
 @app.route('/upload_prompt')
 def upload_prompt():
-    tickers = get_tickers(datastoreClient)
+    tickers = get_tickers()
 
     return render_template('upload_prompt.html', tickers=tickers)
 

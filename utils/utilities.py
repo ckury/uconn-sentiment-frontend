@@ -6,15 +6,13 @@ from google.cloud import datastore
 
 from utils.gcp.datastore import queryEntities
 
-def tickers_from_sectors(client: datastore.Client, sectors:list) -> list:
-    query = client.query(kind=kindCOMPANYINFO)
-    query.add_filter(property_name='Sector', operator='IN', value=sectors)
+def tickers_from_sectors(sectors:list) -> list:
 
-    entities = query.fetch()
+    results = queryEntities(kind=kindCOMPANYINFO, filters=[{'property_name':'Sector', 'operator':'IN', 'value':sectors}])
 
     output = []
 
-    for entity in entities:
+    for entity in results:
         output.append(entity["Yahoo_Ticker"])
 
     return output

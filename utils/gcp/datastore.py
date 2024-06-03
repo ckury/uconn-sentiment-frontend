@@ -20,13 +20,13 @@ from google.cloud import datastore
 
 datastoreClient = datastore.Client()
 
-def queryEntities(kind: str, namespace: str = None, order: str = None, filters: list = None) -> list:
+def queryEntities(kind: str, namespace: str = None, order: str = None, filters: list | dict = None) -> list:
     ''' queryEntities() takes the following arguments:
 
         - kind: String containing kind (required)
         - namespace: String containing the namespace (optional)
         - order: String containing name of property to sort by (optional)
-        - filters: List containing tuples of arguments to be passed to query.add_filter() (optional)
+        - filters: List or dict containing tuples of arguments to be passed to query.add_filter() (optional)
 
         Returns a list of entities which match the parameters.
 
@@ -59,7 +59,12 @@ def queryEntities(kind: str, namespace: str = None, order: str = None, filters: 
     if filters != None:
         # Adds filters to query
         for filter in filters:
-            query.add_filter(*filter)
+
+            if type(filter) is tuple:
+                query.add_filter(*filter)
+
+            if type(filter) is dict:
+                query.add_filter(**filter)
 
     # Returns all entities from query in list format
     return list(query.fetch())
