@@ -1,6 +1,10 @@
+import datetime
+
 from settings import kindCOMPANYINFO
 
 from google.cloud import datastore
+
+from utils.gcp.datastore import queryEntities
 
 def tickers_from_sectors(client: datastore.Client, sectors:list) -> list:
     query = client.query(kind=kindCOMPANYINFO)
@@ -80,25 +84,20 @@ def prepare_period(input: str) -> str:
 
     return output
 
-def get_kinds(client: datastore.Client, namespace: str=None) -> list:
-    query = client.query(kind='__kind__', namespace=namespace)
-    query.keys_only()
 
-    output = []
 
-    for entity in query.fetch():
-        if not entity.key.id_or_name[0] == "_":
-            output.append(entity.key.id_or_name)
-            
-    return output
+def get_tickers() -> list:
 
-def get_tickers(client: datastore.Client) -> list:
-    query = client.query(kind='Company_Info')
-    query.order = ["Yahoo_Ticker"]
+    results = queryEntities(kind='Company_Info', order="Yahoo_Ticker")
     
     output = []
     
-    for entity in query.fetch():
+    for entity in results:
         output.append(entity["Yahoo_Ticker"])
 
     return output
+
+def getDateTime():
+    current_time = datetime.datetime.now()
+
+    return str(current_time.year) + '_' + str(current_time.month) + '_' + str(current_time.day) + '-' + str(current_time.hour) + '_' + str(current_time.minute)

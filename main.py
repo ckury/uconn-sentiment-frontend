@@ -1,14 +1,16 @@
 import os
-import datetime
 
 from flask import Flask, render_template, request, redirect
-from google.cloud import datastore, storage, compute_v1
+from google.cloud import datastore, storage
 from dataplots.graphing_category import data_plot_category
 from dataplots.graphing_summary import data_plot_summary
-from dataplots.table import data_table
+
 
 from settings import bucketUPLOAD, computeZONE, computeINSTANCETEMPLATEURL, computePROJECTID, computeSTARTUPSCRIPT, datastoreNAMESPACEKEYWORDS, kindCOMPANYINFO
-from utils.utilities import get_kinds, get_tickers
+from utils.utilities import get_tickers, getDateTime
+
+from utils.gcp.compute_engine import createVM
+from utils.gcp.datastore import createEntity, queryEntities, queryKinds
 
 
 app = Flask(__name__)
@@ -16,7 +18,6 @@ app = Flask(__name__)
 # Initialize the Datastore client
 datastoreClient = datastore.Client()
 storageClient = storage.Client()
-computeClient = compute_v1.InstancesClient()
 
 @app.route('/')
 def mainpage():
@@ -28,19 +29,19 @@ def login():
 
 @app.route('/control')
 def control():
-    kinds = get_kinds(datastoreClient, datastoreNAMESPACEKEYWORDS)
+    kinds = queryKinds(namespace=datastoreNAMESPACEKEYWORDS)
     try:
         kinds.remove('Generic')
     except ValueError:
         True
 
-    tickers = get_tickers(datastoreClient)
+    tickers = get_tickers()
 
     return render_template('control.html', kinds=kinds, tickers=tickers)
 
 @app.route('/view_data')
 def view_data():
-    kinds = get_kinds(datastoreClient, datastoreNAMESPACEKEYWORDS)
+    kinds = queryKinds(namespace=datastoreNAMESPACEKEYWORDS)
     try:
         kinds.remove('Generic')
     except ValueError:
@@ -56,11 +57,7 @@ def info_drill():
         period = request.form.get('period')
         category = request.form.get('category')
 
-        query = datastoreClient.query(kind='Banks_New')
-        query.add_filter('YahooTicker', '=', yahoo_ticker)
-        query.add_filter('Period', '=', period)
-        query.add_filter('Category', '=', category)
-        results = list(query.fetch())
+        results = queryEntities(kind='Banks_New', filters=[('YahooTicker', '=', yahoo_ticker), ('Period', '=', period), ('Category', '=', category)])
 
         data = []
 
@@ -90,7 +87,7 @@ def company_info():
 
 @app.route('/keyword_lists')
 def topics():
-    kinds = get_kinds(datastoreClient, datastoreNAMESPACEKEYWORDS)
+    kinds = queryKinds(namespace=datastoreNAMESPACEKEYWORDS)
     return render_template('keyword_lists.html', kinds=kinds)
 
 @app.route('/dataplot_placeholder')
@@ -111,20 +108,6 @@ def graph():
 
     if graphType == "sum":
         output = data_plot_summary(ticker=ticker, sector=sector, weighted=weighted, startmonth=startmonth, endmonth=endmonth)
-
-    if output == 429:
-        output = render_template("429.html")
-
-    return output
-
-@app.route('/dataplots/data_table')
-def table():
-    ticker = request.args.get('ticker')
-    industry = request.args.get('industry')
-    startmonth = request.args.get('startmonth')
-    endmonth = request.args.get('endmonth')
-
-    output = data_table(ticker=ticker, industry=industry, startmonth=startmonth, endmonth=endmonth)
 
     if output == 429:
         output = render_template("429.html")
@@ -161,60 +144,32 @@ def create_task():
     if request.method == 'POST':
         json = request.get_json()
 
-        yahooTicker = json.get('yahooTicker')
-        inputFile = json.get('inputFile').replace(" ", "_")
-        keywordList = json.get('keywordList')
+        datetime = getDateTime()
 
-        current_time = datetime.datetime.now()
-
-        dateandtime = str(current_time.year) + '_' + str(current_time.month) + '_' + str(current_time.day) + '-' + str(current_time.hour) + '_' + str(current_time.minute)
-
-        data = {"Yahoo_Ticker": yahooTicker, "Input_File": inputFile, "Keyword_List": keywordList, "Status": "Waiting", "Status_Message": "Waiting for VM to claim task and start processing", "DateTime": dateandtime}
-
-        entity = datastoreClient.entity(datastoreClient.key("Task_List"))
-
-        entity.update(data)
-
-        try:
-            datastoreClient.put(entity=entity)
-            entityId = entity.key.id
+        entityid = createEntity("Task_List", 
+                                {  "Yahoo_Ticker": json.get('yahooTicker'), 
+                                   "Input_File": json.get('inputFile').replace(" ", "_"), 
+                                   "Keyword_List": json.get('keywordList'), 
+                                   "Status": "Waiting", 
+                                   "Status_Message": "Waiting for VM to claim task and start processing", 
+                                   "DateTime": datetime})
         
-        except:
-            return
+        createVM(computePROJECTID, computeZONE, computeINSTANCETEMPLATEURL, computeSTARTUPSCRIPT, f'production-automatic-{entityid}')
         
-        metadata = compute_v1.Metadata()
-        items = compute_v1.Items()
-        items.key = "startup-script"
-        items.value = computeSTARTUPSCRIPT
-        metadata.items = [items]
-        
-        instance = compute_v1.InsertInstanceRequest()
-
-        instance.project = computePROJECTID
-        instance.instance_resource.name = f'production-automatic-{entityId}'
-        instance.zone = computeZONE
-        instance.source_instance_template = computeINSTANCETEMPLATEURL
-        
-        instance.instance_resource.metadata = metadata
-
-        requestCompute = computeClient.insert(instance)
-        operation = requestCompute.result()
 
         # Create and Start VM
-        return "Success: Task ID = " + str(entityId), "201"
+        return "Success: Task ID = " + str(entityid), "201"
 
 @app.route('/get_keywords', methods=['GET'])
 def get_keywords():
     keyword_list = request.args.get('list')
 
-    query = datastoreClient.query(kind=keyword_list, namespace=datastoreNAMESPACEKEYWORDS)
-
-    query.order = ['Keyword']
+    results = queryEntities(kind=keyword_list, namespace=datastoreNAMESPACEKEYWORDS, order='Keyword')
 
     output = []
 
-    for e in query.fetch():
-        output.append((e["Keyword"], e["Category"], e["Weight"]))
+    for entity in results:
+        output.append((entity["Keyword"], entity["Category"], entity["Weight"]))
 
     return output
 
@@ -255,14 +210,12 @@ def save_list():
 @app.route('/get_companies', methods=['GET'])
 def get_companies():
 
-    query = datastoreClient.query(kind='Company_Info')
-
-    query.order = ['Yahoo_Ticker']
+    results = queryEntities(kind='Company_Info', order='Yahoo_Ticker')
 
     output = []
 
-    for e in query.fetch():
-        output.append((e["Yahoo_Ticker"], e["Full_Name"], e["Sector"]))
+    for entity in results:
+        output.append((entity["Yahoo_Ticker"], entity["Full_Name"], entity["Sector"]))
 
     return output
 
