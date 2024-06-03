@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, render_template, request, redirect
-from google.cloud import datastore, storage
+from google.cloud import datastore
 from dataplots.graphing_category import data_plot_category
 from dataplots.graphing_summary import data_plot_summary
 
@@ -17,7 +17,6 @@ app = Flask(__name__)
 
 # Initialize the Datastore client
 datastoreClient = datastore.Client()
-storageClient = storage.Client()
 
 @app.route('/')
 def mainpage():
@@ -134,7 +133,7 @@ def upload_file():
         f.filename += ".html"
 
         uploadFile(bucket_name=bucketUPLOAD, file=f)
-        
+
     return render_template('upload_success.html')
 
 @app.route('/create_task', methods=['POST'])
