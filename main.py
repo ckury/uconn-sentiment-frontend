@@ -11,7 +11,7 @@ from utils.utilities import get_tickers, getDateTime
 
 from utils.gcp.compute_engine import createVM
 from utils.gcp.datastore import createEntity, queryEntities, queryKinds
-
+from utils.gcp.storage import uploadFile
 
 app = Flask(__name__)
 
@@ -133,10 +133,8 @@ def upload_file():
 
         f.filename += ".html"
 
-        bucket = storageClient.get_bucket(bucketUPLOAD)
-        blob = bucket.blob(f.filename)
-
-        blob.upload_from_file(f)
+        uploadFile(bucket_name=bucketUPLOAD, file=f)
+        
     return render_template('upload_success.html')
 
 @app.route('/create_task', methods=['POST'])
