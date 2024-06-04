@@ -1,7 +1,7 @@
-from google.cloud import datastore
 import plotly.graph_objs as go
 from plotly.offline import plot
 from utils.utilities import input_cleanup, title_creation, tickers_from_sectors, prepare_period
+from utils.gcp.datastore import queryEntities
 
 def data_plot_category(ticker: str | list=None, 
                        sector: str | list=None, 
@@ -16,9 +16,6 @@ def data_plot_category(ticker: str | list=None,
     
     # Initialize plotly graph instance
     fig = go.Figure()
-
-    # Initialize Datastore Client
-    client = datastore.Client()
 
     # Converting string provided by URL to boolean value
     if weighted in [True, "True"]: weighted = True; scoreColumn = "Weighted Sentiment"
@@ -35,7 +32,7 @@ def data_plot_category(ticker: str | list=None,
 
     # Try to fetch the data
     try:
-        entities = fetch_ticker_data(client=client, kind="Sentiment_Details")
+        entities = queryEntities(kind="Sentiment_Details", order='YahooTicker')
 
     # If data fetch fails, return catch error and provide error code as response
     except:
@@ -86,11 +83,3 @@ def data_plot_category(ticker: str | list=None,
 
     # Return HTML div to main flask app
     return plot(fig, include_plotlyjs=True, output_type='div')
-
-def fetch_ticker_data(client: datastore.Client, kind: str) -> list:
-    # Create a query to fetch entities from the Datastore
-    query = client.query(kind=kind)
-    query.order = ['YahooTicker']
-    
-    # Return a list of the entities
-    return list(query.fetch())
