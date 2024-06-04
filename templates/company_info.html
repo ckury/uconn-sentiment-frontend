@@ -63,7 +63,7 @@
     <script>
         window.onload = getCompanyList()
 
-        function addRow(col1 = "", col2 = "", col3 = "") {
+        function addRow(col1 = "", col2 = "", col3 = "", col4 = "0") {
             var new_row = document.getElementById('table-company-table').getElementsByTagName('tbody')[0].insertRow()
             var cell1 = new_row.insertCell(0)
             cell1.innerHTML = col1
@@ -78,6 +78,11 @@
             cell3.contentEditable = true;
 
             new_row.insertCell(3).innerHTML = '<button class="logoutButton" style="top: 0; margin: 2px;" onclick="deleteRow(this)"><span class="material-symbols-outlined" onclick="">close</span></button>'
+
+            var cell4 = new_row.insertCell(4)
+            cell4.innerHTML = col4
+            cell4.style.display = "none";
+            cell4.contentEditable = false;
         }
 
         function deleteRow(r) {
@@ -101,7 +106,7 @@
                 .then(data => {
                     for (let i = 0; i < data.length; i++) {
                         row = data[i]
-                        addRow(row[0], row[1], row[2])
+                        addRow(row[0], row[1], row[2], row[3])
                     }
                 })
                 .catch(error => {
@@ -141,7 +146,7 @@
 
                 rowdata = []
 
-                for (let j = 0; j < (row.cells.length - 1); j++) {
+                for (let j = 0; j < (row.cells.length); j++) {
                     celldata = row.cells[j].textContent.trim()
                     rowdata.push(celldata)
                 }

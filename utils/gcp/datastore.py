@@ -5,6 +5,8 @@ This module interfaces with GCP datastore to do the following:
 
 queryEntities -> Fetches all entities in a given namespace and kind
 createEntity -> Creates an entity
+queryKinds -> Gets all kinds in a given namespace
+queryIds -> Gets all entity ids in a given kind
 checkEntity -> Checks to see if entity exists which matches data
 updateEntity -> Changes the data of an existing entity
 removeEntity -> Removes an existing entity
@@ -20,7 +22,7 @@ from google.cloud import datastore
 
 datastoreClient = datastore.Client()
 
-def queryEntities(kind: str, namespace: str = None, order: str = None, filters: list | dict = None, limit: int = None) -> list:
+def queryEntities(kind: str, namespace: str = None, order: str = None, filters: list | dict = None, limit: int = None, _ids_only: bool = False) -> list:
     ''' queryEntities() takes the following arguments:
 
         - kind: String containing kind (required)
@@ -67,15 +69,19 @@ def queryEntities(kind: str, namespace: str = None, order: str = None, filters: 
             if type(filter) is dict:
                 query.add_filter(**filter)
 
+    if _ids_only != False:
+        query.keys_only()
+
     # Returns all entities from query in list format
     return list(query.fetch(limit=limit))
 
-def createEntity(kind: str, data: dict) -> str:
+def createEntity(kind: str, data: dict, namespace: str = None) -> str:
     ''' createEntity() takes the following arguments:
 
         - kind: String containing kind (required)
         - data: Dictionary containing property names as keys and values as values (required)
-
+        - namespace: String containing the namespace (optional)
+        
         Returns a string with the ID of the new entity.
 
         Usage example:
@@ -83,7 +89,7 @@ def createEntity(kind: str, data: dict) -> str:
         id = createEntity(kind='Example Kind', data={ "property1": "value1" })
 
     '''
-    entity = datastoreClient.entity(datastoreClient.key(kind))
+    entity = datastoreClient.entity(datastoreClient.key(kind, namespace=namespace))
     
     entity.update(data)
 
@@ -114,7 +120,23 @@ def queryKinds(namespace: str = None) -> list:
             
     return output
 
-def checkEntity(data:dict, kind: str, namespace: str = None) -> datastore.Entity:
+def queryIds(*args, **kwargs):
+    ''' queryIds() is a proxy function of queryEntities() and takes the same arguments.
+
+        Returns a list of ids of entities which match the filters.
+
+    '''
+
+    result = queryEntities(*args, _ids_only=True, **kwargs)
+    
+    output = []
+
+    for entity in result:
+        output.append(entity.key.id)
+
+    return output
+
+def checkEntity(id:str, kind: str, namespace: str = None) -> datastore.Entity:
     ''' checkEntity() takes the following arguments:
 
         - kind: String containing kind (required)
@@ -123,7 +145,14 @@ def checkEntity(data:dict, kind: str, namespace: str = None) -> datastore.Entity
         Returns entity if present and None if not present
 
     '''
-    return
+
+    id = int(id)
+
+    key = datastoreClient.key(kind, id, namespace=namespace)
+
+    output = datastoreClient.get(key=key)
+
+    return output
 
 def updateEntity(entity: datastore.Entity, data:dict):
     ''' updateEntity() takes the following arguments:
@@ -141,9 +170,14 @@ def updateEntity(entity: datastore.Entity, data:dict):
 
     '''
 
+    for key, value in data.items():
+        entity[key] = value
+
+    datastoreClient.put(entity=entity)
+
     return
 
-def removeEntity():
+def removeEntity(entity: datastore.Entity):
     ''' removeEntity() takes the following argument:
 
         - entity: Datastore Entity from either checkEntity() or queryEntities()
@@ -157,4 +191,7 @@ def removeEntity():
         removeEntity(existing_entity)
 
     '''
+
+    datastoreClient.delete(entity.key)
+
     return

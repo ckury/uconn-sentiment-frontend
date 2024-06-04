@@ -9,7 +9,7 @@ from settings import bucketUPLOAD, computeZONE, computeINSTANCETEMPLATEURL, comp
 from utils.utilities import get_tickers, getDateTime
 
 from utils.gcp.compute_engine import createVM
-from utils.gcp.datastore import createEntity, queryEntities, queryKinds
+from utils.gcp.datastore import createEntity, queryEntities, queryKinds, queryIds, updateEntity, checkEntity, removeEntity
 from utils.gcp.storage import uploadFile
 
 app = Flask(__name__)
@@ -165,7 +165,7 @@ def get_keywords():
     output = []
 
     for entity in results:
-        output.append((entity["Keyword"], entity["Category"], entity["Weight"]))
+        output.append((entity["Keyword"], entity["Category"], entity["Weight"], entity.key.id))
 
     return output
 
@@ -177,29 +177,31 @@ def save_list():
         keyword_list = json.get('list')
         data = json.get('data')
 
+        id_list = queryIds(kind=keyword_list, namespace=datastoreNAMESPACEKEYWORDS)
+
         for row in data:
-
-            #TODO: Change logic to allow for row deletion
             
-            query = datastoreClient.query(kind=keyword_list, namespace=datastoreNAMESPACEKEYWORDS)
-            query.add_filter('Keyword', '=', row[0])
-            results = list(query.fetch(limit=1))
+            row_keyword = row[0]
+            row_category = row[1]
+            row_weight = row[2]
+            row_id = int(row[4])
 
-            if results:
-                entity = results[0] 
+            if row_id not in id_list:
+                createEntity(kind=keyword_list, 
+                             namespace=datastoreNAMESPACEKEYWORDS, 
+                             data={"Keyword": row_keyword, "Category": row_category, "Weight": row_weight})
 
-            else:
-                entity = datastoreClient.entity(datastoreClient.key(keyword_list, namespace=datastoreNAMESPACEKEYWORDS))
+            if row_id in id_list:
+                updateEntity(checkEntity(id=row_id, kind=keyword_list, namespace=datastoreNAMESPACEKEYWORDS),
+                             data={"Keyword": row_keyword, "Category": row_category, "Weight": row_weight})
+                
+                id_list.remove(row_id)
 
-            data = {"Keyword": row[0], "Category": row[1], "Weight": row[2]}
             
-            entity.update(data)
-
-            try:
-                datastoreClient.put(entity=entity)
-        
-            except:
-                return 
+        for id in id_list:
+            removeEntity(checkEntity(kind=keyword_list, 
+                                     namespace=datastoreNAMESPACEKEYWORDS,
+                                     id=id))
             
         return "Success", 201
     
@@ -211,7 +213,7 @@ def get_companies():
     output = []
 
     for entity in results:
-        output.append((entity["Yahoo_Ticker"], entity["Full_Name"], entity["Sector"]))
+        output.append((entity["Yahoo_Ticker"], entity["Full_Name"], entity["Sector"], entity.key.id))
 
     return output
 
@@ -222,29 +224,28 @@ def save_company_list():
 
         data = json.get('data')
 
+        id_list = queryIds(kind=kindCOMPANYINFO)
+
         for row in data:
-
-            #TODO: Change logic to allow for row deletion
             
-            query = datastoreClient.query(kind=kindCOMPANYINFO)
-            query.add_filter('Yahoo_Ticker', '=', row[0])
-            results = list(query.fetch(limit=1))
+            row_yahoo_ticker = row[0]
+            row_full_name = row[1]
+            row_sector = row[2]
+            row_id = int(row[4])
 
-            if results:
-                entity = results[0] 
+            if row_id not in id_list:
+                createEntity(kind=kindCOMPANYINFO, 
+                             data={"Yahoo_Ticker": row_yahoo_ticker, "Full_Name": row_full_name, "Sector": row_sector})
 
-            else:
-                entity = datastore.Entity(key=datastoreClient.key(kindCOMPANYINFO))
+            if row_id in id_list:
+                updateEntity(checkEntity(id=row_id, kind=kindCOMPANYINFO),
+                             data={"Yahoo_Ticker": row_yahoo_ticker, "Full_Name": row_full_name, "Sector": row_sector})
+                
+                id_list.remove(row_id)
 
-            data = {"Yahoo_Ticker": row[0], "Full_Name": row[1], "Sector": row[2]}
             
-            entity.update(data)
-
-            try:
-                datastoreClient.put(entity=entity)
-        
-            except:
-                return 
+        for id in id_list:
+            removeEntity(checkEntity(kind=kindCOMPANYINFO, id=id))
             
         return "Success", 201
 
