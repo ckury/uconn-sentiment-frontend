@@ -1,7 +1,6 @@
 import os
 
 from flask import Flask, render_template, request, redirect
-from google.cloud import datastore
 from dataplots.graphing_category import data_plot_category
 from dataplots.graphing_summary import data_plot_summary
 
@@ -13,9 +12,6 @@ from utils.gcp.datastore import createEntity, queryEntities, queryKinds, queryId
 from utils.gcp.storage import uploadFile
 
 app = Flask(__name__)
-
-# Initialize the Datastore client
-datastoreClient = datastore.Client()
 
 @app.route('/')
 def mainpage():
