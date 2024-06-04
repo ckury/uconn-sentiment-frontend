@@ -2,8 +2,6 @@ import datetime
 
 from settings import kindCOMPANYINFO
 
-from google.cloud import datastore
-
 from utils.gcp.datastore import queryEntities
 
 def tickers_from_sectors(sectors:list) -> list:
