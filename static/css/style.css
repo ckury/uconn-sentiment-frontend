@@ -1,10 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Reddit+Mono:wght@300&display=swap');
 
 body {
     font-family: "Roboto", sans-serif;
     margin-left: 80px;
     padding-left: 10px;
 }
+
+.subtext {
+    font-family: "Reddit Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-size: small;
+  }
 
 /* Center the loader */
 .loader {
@@ -82,7 +91,7 @@ body {
     background-color: #000E2F;
     margin-left: -10px;
     margin-top: -10px;
-    margin-right: -10px;
+    margin-right: -8px;
 }
 
 .topText{
@@ -102,7 +111,6 @@ body {
     border-right: 4px solid hsl(0, 0%, 75%);
     overflow-x: hidden;
     transition: 0.25s;
-    padding-top: 60px;
 }
 @keyframes spin {
     0% {
