@@ -20,13 +20,14 @@ from google.cloud import datastore
 
 datastoreClient = datastore.Client()
 
-def queryEntities(kind: str, namespace: str = None, order: str = None, filters: list | dict = None) -> list:
+def queryEntities(kind: str, namespace: str = None, order: str = None, filters: list | dict = None, limit: int = None) -> list:
     ''' queryEntities() takes the following arguments:
 
         - kind: String containing kind (required)
         - namespace: String containing the namespace (optional)
         - order: String containing name of property to sort by (optional)
         - filters: List or dict containing tuples of arguments to be passed to query.add_filter() (optional)
+        - limit: Integer with max number of entities to fetch (optional)
 
         Returns a list of entities which match the parameters.
 
@@ -67,7 +68,7 @@ def queryEntities(kind: str, namespace: str = None, order: str = None, filters: 
                 query.add_filter(**filter)
 
     # Returns all entities from query in list format
-    return list(query.fetch())
+    return list(query.fetch(limit=limit))
 
 def createEntity(kind: str, data: dict) -> str:
     ''' createEntity() takes the following arguments:
@@ -113,19 +114,47 @@ def queryKinds(namespace: str = None) -> list:
             
     return output
 
-def checkEntity(data:dict, kind: str, namespace: str = None) -> bool:
+def checkEntity(data:dict, kind: str, namespace: str = None) -> datastore.Entity:
     ''' checkEntity() takes the following arguments:
 
         - kind: String containing kind (required)
         - namespace: String containing the namespace (optional)
 
-        Returns bool of True or false corresponding to whether the entity is present
+        Returns entity if present and None if not present
 
     '''
     return
 
-def updateEntity():
+def updateEntity(entity: datastore.Entity, data:dict):
+    ''' updateEntity() takes the following arguments:
+
+        - entity: Datastore Entity from either checkEntity() or queryEntities()
+        - data: Dictionary of keys (properties) and values to update
+
+        Doesn't return a value.
+
+        Usage Example:
+
+        existing_entity = checkEntity(data, kind)
+
+        updateEntity(existing_entity, {"Property1":"Value1"})
+
+    '''
+
     return
 
 def removeEntity():
+    ''' removeEntity() takes the following argument:
+
+        - entity: Datastore Entity from either checkEntity() or queryEntities()
+
+        Doesn't return a value.
+
+        Usage Example:
+
+        existing_entity = checkEntity(data, kind)
+
+        removeEntity(existing_entity)
+
+    '''
     return
