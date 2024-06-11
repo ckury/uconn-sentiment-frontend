@@ -3,6 +3,10 @@ This repository holds the code used for the frontend/data visualization part of 
 
 ## Project Showcase
 
+This project's goal was to be able to run a custom sentiment analysis model on quarterly conference calls released by publicly traded companies and to visualize such data. This data would in production be used as one of many datapoints considered when making an investment decision.
+
+The model would take in transcripts, separate them into individual paragraphs and tokenize them based on a predefined list of keywords. Then, the model will generate a score based on how positive or negative the sentiment is of the paragraph. Afterwards, the data is both uploaded to a cloud database and run through a summary program which summarizes the overall sentiment of the call. This summary is either unweighted (each keyword is considered equally important) or weighted (each keyword is assigned a predetermined value equal to the importance of the keyword).
+
 ### Pages:
 
 #### /view_data
