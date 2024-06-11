@@ -1,6 +1,35 @@
 # Sentiment Project Frontend
 This repository holds the code used for the frontend/data visualization part of the Sentiment Project at UConn. The project includes this frontend written in python using flask and a backend running an algorithm to calculate sentiment of financial conference calls (also written in python and NLTK, available at https://github.com/ckury/uconn-sentiment-backend). A main component of the project was to use Google Cloud (thenceforth abbreviated as `GCP`) resources including Compute Engine, App Engine, Datastore and Storage. 
 
+## Project Showcase
+
+### Pages:
+
+#### /view_data
+The view_data page is where the main data visualization occurs. This page allows you to select data by the ticker, sector or both. This page also allows you to select either weighted or unweighted sentiment scores, and if the data is based on a scoring category or if all of the data is summarized into a single data point.
+
+![view data](/docs/images/view_data.png)
+
+#### /info_drill
+The info_drill page allows deeper and more detailed sentiment analysis with direct access to paragraphs for each conference call along with which category it was assigned and the score assigned.
+
+![info drill](/docs/images/info_drill.png)
+
+#### /keyword_lists
+This page allows you to edit the keyword lists by which the conference calls are scored against. This page also allows you to modify the weighting of each keyword.
+
+![keyword lists](/docs/images/keyword_lists.png)
+
+#### /company_info
+This page allows you to edit the list of companies and their info included in the system. This page also allows you to control which tickers are searched for when looking for data based on sector.
+
+![company info](/docs/images/company_info.png)
+
+#### /control
+The control page allows you to upload conference call transcripts and run the sentiment analysis model on these transcripts with the selected keyword list.
+
+![control](/docs/images/control.png)
+
 ## Note about GCP
 While the front-end can be run anywhere with access to the internet and the ability to enter GCP credentials, the front-end was designed specifically to interact with a GCP project and resources. Migrating to AWS, Azure or any other cloud provider or locally hosting would require copying the existing GCP code under `/utils/`, modifying the code to work with your setup and finally modifying import statements throughout the project to point to your new functions. All GCP code has been centralized to the `/utils/gcp/` directory, all other code just calls these functions. Writing support for other implementations was beyond the scope of the original project.
 
