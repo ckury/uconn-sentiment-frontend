@@ -36,6 +36,32 @@ The control page allows you to upload conference call transcripts and run the se
 
 ![control](/docs/images/control.png)
 
+### Data Pipeline
+
+The dataflow is as follows:
+
+#### Transcript Preparation
+1. User creates a company entry in the /company_info page if not already present. This updates the company_info kind in datastore which is referenced during the data upload and processing stages.
+2. User uploads transcripts through the `Upload Conference Calls` button on /control page. These files are named following input fields provided when uploading the file and are storred in a cloud bucket.
+
+#### Processing settings
+3. User selects company ticker for processing in /control
+4. User selects keyword lists to be used. These can be set up in /keyword_lists if not already setup. These are expected to be consistent across multiple companies. There is an option for the generic keyword list. This list contains keywords that would be useful for all companies and can be selected separately
+
+#### Sentiment scoring and processing
+5. User clicks `Submit for Processing` button
+6. Website performs the following:
+    - An entry is added to task_list kind to track inprogress tasks and to store basic data like keyword lists to use and company ticker selected.
+    - A VM is created to automatically handle processing.
+7. VM automatically downloads keyword lists, ticker conference call transcripts and dependancies using the task_list entries and current files from the backend github repository
+8. VM automatically performs conversion from the conference call input to a standard CSV format
+9. VM automatically performs tokenization, scoring and summarization and outputs to local CSVs
+10. VM automatically uploads data to Sentiment_Data namespace and on completion, self destructs. Throughout processing, VM updates tasklist with progress and status. VM program is designed to be run on preemptable VMs so as to save cost. This means that it will automatically recover from a preempt event.
+
+#### Data Viewing
+11. Once processing is finished, the user can view the data output either in /view_data or /info_drill
+
+
 ## Note about GCP
 While the front-end can be run anywhere with access to the internet and the ability to enter GCP credentials, the front-end was designed specifically to interact with a GCP project and resources. Migrating to AWS, Azure or any other cloud provider or locally hosting would require copying the existing GCP code under `/utils/`, modifying the code to work with your setup and finally modifying import statements throughout the project to point to your new functions. All GCP code has been centralized to the `/utils/gcp/` directory, all other code just calls these functions. Writing support for other implementations was beyond the scope of the original project.
 
