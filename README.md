@@ -103,7 +103,7 @@ ADDITIONAL NOTE: GCP Resources are NOT free and thusly require either free credi
         - Set time limit: `True`
         - Time limit: Anything works, recommended: `6 hours` (This prevents the machine from getting stuck and running forever. For longer processing, change this number but be mindful of errors costing more)
         - On VM termination: `Delete` (This automatically deletes the VM and removes the static resources used as this is not needed and would increase costs)
-    - Change boot disk size to `32 GBs`
+    - Change boot disk size to `32 GBs` (The dependancies are large and need more than the 10 GB default)
     - Access scopes: `Set access for each API` Modify the following: (These are required for the VM to access the correct GCP resources)
         - Cloud Datastore: `Enabled`
         - Compute Engine: `Read Write`
