@@ -1,6 +1,8 @@
 # Sentiment Project Frontend
 This repository holds the code used for the frontend/data visualization part of the Sentiment Project at UConn. The project includes this frontend written in python using flask and a backend running an algorithm to calculate sentiment of financial conference calls (also written in python and NLTK, available at https://github.com/ckury/uconn-sentiment-backend). A main component of the project was to use Google Cloud (thenceforth abbreviated as `GCP`) resources including Compute Engine, App Engine, Datastore and Storage. 
 
+*NOTE: This README and repository act as the main hub of the project. The backend repository mentioned above is a part of this project but acts as a sort of "sub-repository".*
+
 ## Project Showcase
 
 This project's goal was to be able to run a custom sentiment analysis model on quarterly conference calls released by publicly traded companies and to visualize such data. This data would in production be used as one of many datapoints considered when making an investment decision.
