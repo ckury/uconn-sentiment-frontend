@@ -67,10 +67,6 @@ ADDITIONAL NOTE: GCP Resources are NOT free and thusly require either free credi
 6. TODO: Datastore Setup
 7. TODO: Cloud Storage Setup
 
-
-
-
-
 ## Local code setup
 To develop and test the code locally, a few things must be set up prior. Follow the below steps to set up the environment. Note that this assumes the Google Cloud CLI is already installed. I'd recommend using VSCode to manage git but any git manager works.
 1. Clone the repo
