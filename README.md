@@ -82,7 +82,7 @@ ADDITIONAL NOTE: GCP Resources are NOT free and thusly require either free credi
 ### Setup GCP Project 
 1. In the Cloud Console, Click the project selector and press `New Project`. Fill out a memerable name, ignore the organization field and press create. (Detailed Instructions: https://cloud.google.com/resource-manager/docs/creating-managing-projects) NOTE: Projects usually are created with an association to your billing account automatically, if you encounter billing problems in future steps, verify that the project has a valid billing account by following https://cloud.google.com/billing/docs/how-to/verify-billing-enabled 
 2. Navigate to the left nav panel and click on APIs & Services (If the page isn't pinned to the nav panel, click `All Products` and under Management)
-3. Enable the following services/APIs by clicking `ENABLE APIS AND SERVICES` and searching for the following: (Note this list has not been completly tested yet)
+3. Enable the following services/APIs by clicking `ENABLE APIS AND SERVICES` and searching for the following: (Note this list has not been completely tested yet)
     - App Engine
     - App Engine Admin API
     - Cloud Datastore API
@@ -90,10 +90,33 @@ ADDITIONAL NOTE: GCP Resources are NOT free and thusly require either free credi
     - Cloud Storage
     - Cloud Storage API
     - Google Cloud APIs
-4. TODO: App Engine Setup
-5. TODO: Compute Engine Setup
-6. TODO: Datastore Setup
-7. TODO: Cloud Storage Setup
+
+#### Setup Compute Engine 
+4. Navigate to the left nav panel and click on Compute Engine (If the page isn't pinned to the nav panel, click `All Products` and under Compute)
+5. Under "Virtual Machines" in the left panel, click Instance Templates
+6. Click `CREATE INSTANCE TEMPLATE` at the top and enter the following
+    - Name: `production-model-vm-template` (Modifying from this requires changing `computeINSTANCETEMPLATEURL` in `settings.py`)
+    - Location: `Global` (Modifying from this requires changing `computeINSTANCETEMPLATEURL` in `settings.py`)
+    - Machine type: Any machine type works, recommeded type is: `e2-standard-2`
+    - VM provisioning model: Either works, recommended is: `Spot` (More info: https://cloud.google.com/compute/docs/instances/spot)
+    - VM provisioning model advanced settings:
+        - Set time limit: `True`
+        - Time limit: Anything works, recommended: `6 hours` (This prevents the machine from getting stuck and running forever. For longer processing, change this number but be mindful of errors costing more)
+        - On VM termination: `Delete` (This automatically deletes the VM and removes the static resources used as this is not needed and would increase costs)
+    - Change boot disk size to `32 GBs`
+    - Access scopes: `Set access for each API` Modify the following: (These are required for the VM to access the correct GCP resources)
+        - Cloud Datastore: `Enabled`
+        - Compute Engine: `Read Write`
+7. Click `CREATE` at the bottom. NOTE: Double check each option as once the template is created, it cannot be modified. You must delete and remake the template to change anything.
+
+#### Setup App Engine
+8. TODO: App Engine Setup
+
+#### Setup Datastore
+9. TODO: Datastore Setup
+
+#### Setup Cloud Storage
+10. TODO: Cloud Storage Setup
 
 ## Local code setup
 To develop and test the code locally, a few things must be set up prior. Follow the below steps to set up the environment. Note that this assumes the Google Cloud CLI is already installed. I'd recommend using VSCode to manage git but any git manager works.
