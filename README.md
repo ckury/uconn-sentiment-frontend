@@ -62,6 +62,12 @@ The dataflow is as follows:
 11. Once processing is finished, the user can view the data output either in /view_data or /info_drill
 
 
+#### Diagrams
+
+![dataflow](/docs/diagrams/GCP%20Data%20flow%20Overview.png)
+
+![processflow](/docs/diagrams/GCP%20Process%20flow%20Overview.png)
+
 ## Note about GCP
 While the front-end can be run anywhere with access to the internet and the ability to enter GCP credentials, the front-end was designed specifically to interact with a GCP project and resources. Migrating to AWS, Azure or any other cloud provider or locally hosting would require copying the existing GCP code under `/utils/`, modifying the code to work with your setup and finally modifying import statements throughout the project to point to your new functions. All GCP code has been centralized to the `/utils/gcp/` directory, all other code just calls these functions. Writing support for other implementations was beyond the scope of the original project.
 
