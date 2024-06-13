@@ -100,7 +100,7 @@
 
   <div class="loader" id="loader" style="display: none;"></div>
 
-  <iframe id="data_plot" title="Data Plot" style="border:none;" width="100%" height="600" src="/dataplot_placeholder">
+  <iframe id="data_plot" title="Data Plot" style="border:none;" width="100%" height="600" src="/data_plot?type=none">
   </iframe>
 
   <script>
@@ -140,7 +140,7 @@
         weighted = "True"
       }
 
-      document.getElementById("data_plot").setAttribute("src", "/dataplots/data_plot?ticker=" + tickerText + "&sector=" + sectorText + "&type=" + graph + "&weighted=" + weighted)
+      document.getElementById("data_plot").setAttribute("src", "/data_plot?ticker=" + tickerText + "&sector=" + sectorText + "&type=" + graph + "&weighted=" + weighted)
 
       showSpinner()
       setTimeout(hideSpinner, 7500)

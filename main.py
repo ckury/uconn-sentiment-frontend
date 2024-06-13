@@ -1,28 +1,60 @@
+'''
+main.py main python file for UCONN Sentiment Analysis
+
+This module uses flask to run a webserver as the frontend of the project.
+
+Note: GCP credentials need to be set as environmental variable when running the python program.
+These credentials are preset on GCP resources like App Engine and Compute Engine but need to be
+set up on local systems.
+
+Production Note: Running this file directly will use the flask development webserver. Per flask
+documentation, this is not recommended for production use. Please use a production WSGI server
+in a production setting. Gunicorn is installed with requirements.txt and is the recommended server.
+
+author: Charlie Kuryluk
+date: 6/3/2024
+
+'''
+# Libraries pre-installed
 import os
 
+# Libraries installed from requirements.txt
 from flask import Flask, render_template, request, redirect
+
+# Scripts included in repository
 from dataplots.graphing_category import data_plot_category
 from dataplots.graphing_summary import data_plot_summary
 
-from settings import bucketUPLOAD, computeZONE, computeINSTANCETEMPLATEURL, computePROJECTID, computeSTARTUPSCRIPT, datastoreNAMESPACEKEYWORDS, kindCOMPANYINFO
 from utils.utilities import get_tickers, getDateTime
 
 from utils.gcp.compute_engine import createVM
 from utils.gcp.datastore import createEntity, queryEntities, queryKinds, queryIds, updateEntity, checkEntity, removeEntity
 from utils.gcp.storage import uploadFile
+# ===============================
 
+# Settings
+from settings import bucketUPLOAD, computeZONE, computeINSTANCETEMPLATEURL, computePROJECTID, computeSTARTUPSCRIPT, datastoreNAMESPACEKEYWORDS, kindCOMPANYINFO
+
+# Flask app initialization
 app = Flask(__name__)
 
+# Flask app page setup
 @app.route('/')
 def mainpage():
+    '''Main page does not exist, Temperary route redirects to the /view_data page'''
+
     return redirect("/view_data")
 
 @app.route('/login')
 def login():
+    '''Login page for future auth feature'''
+
     return render_template('login.html')
 
 @app.route('/control')
 def control():
+    '''Control page to control the model processing'''
+
     kinds = queryKinds(namespace=datastoreNAMESPACEKEYWORDS)
     try:
         kinds.remove('Generic')
@@ -35,6 +67,8 @@ def control():
 
 @app.route('/view_data')
 def view_data():
+    '''Main data visualization page with graphs'''
+
     kinds = queryKinds(namespace=datastoreNAMESPACEKEYWORDS)
     try:
         kinds.remove('Generic')
@@ -45,6 +79,8 @@ def view_data():
 
 @app.route('/info_drill', methods=['GET', 'POST'])
 def info_drill():
+    '''Individual conference call data viewer'''
+
     data = None
     if request.method == 'POST':
         yahoo_ticker = request.form.get('yahooTicker')
@@ -84,12 +120,8 @@ def topics():
     kinds = queryKinds(namespace=datastoreNAMESPACEKEYWORDS)
     return render_template('keyword_lists.html', kinds=kinds)
 
-@app.route('/dataplot_placeholder')
-def dataplot_placeholder():
-    return render_template('dataplot_placeholder.html')
-
-@app.route('/dataplots/data_plot')
-def graph():
+@app.route('/data_plot')
+def data_plot():
     ticker = request.args.get('ticker')
     sector = request.args.get('sector')
     graphType = request.args.get('type')
@@ -100,8 +132,11 @@ def graph():
     if graphType == "icat":
         output = data_plot_category(ticker=ticker, sector=sector, weighted=weighted, startmonth=startmonth, endmonth=endmonth)
 
-    if graphType == "sum":
+    elif graphType == "sum":
         output = data_plot_summary(ticker=ticker, sector=sector, weighted=weighted, startmonth=startmonth, endmonth=endmonth)
+
+    else:
+        output = render_template('dataplot_placeholder.html')
 
     if output == 429:
         output = render_template("429.html")
@@ -244,6 +279,8 @@ def save_company_list():
             removeEntity(checkEntity(kind=kindCOMPANYINFO, id=id))
             
         return "Success", 201
+# ===============================
 
+# This runs the test server if this file is directly run
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
