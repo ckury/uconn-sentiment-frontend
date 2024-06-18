@@ -136,10 +136,10 @@ def data_plot():
         output = data_plot_summary(ticker=ticker, sector=sector, weighted=weighted, startmonth=startmonth, endmonth=endmonth)
 
     else:
-        output = render_template('dataplot_placeholder.html')
+        output = render_template('message_template.html', message='Use the above fields to select data, then press the "View Plot" button')
 
     if output == 429:
-        output = render_template("429.html")
+        output = render_template('message_template.html', message='Error 429: Google Cloud Firestore Data Quota Reached')
 
     return output
 
