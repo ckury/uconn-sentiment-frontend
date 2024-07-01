@@ -4,11 +4,12 @@ compute_engine.py module for UCONN Sentiment Analysis
 This module interfaces with GCP compute engine to do the following:
 
 createVM -> Creates a VM with given parameters
+startVM -> Starts an existing virtual machine
 
 Note: GCP credentials need to be set as environmental variable when running the python program
 
 author: Charlie Kuryluk
-date: 6/3/2024
+date: 6/30/2024
 
 '''
 
@@ -33,4 +34,15 @@ def createVM(projectid, zone, templateurl, startupscript, name):
     instance.instance_resource.metadata = metadata
 
     requestCompute = computeClient.insert(instance)
+    return requestCompute.result()
+
+def startVM(projectid, zone, name):
+    instance = compute_v1.StartInstanceRequest()
+
+    instance.project = projectid
+    instance.instance = name
+    instance.zone = zone
+
+    requestCompute = computeClient.start(request=instance)
+
     return requestCompute.result()
